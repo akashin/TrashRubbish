@@ -22,5 +22,10 @@ public class TrashRubbishGame extends Game {
 
     public AssetManager getAssetManager() {
         return assetManager;
+	}
+
+    @Override
+    public void dispose() {
+        VisUI.dispose();
     }
 }
