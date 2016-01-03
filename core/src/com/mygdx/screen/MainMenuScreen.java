@@ -1,7 +1,10 @@
 package com.mygdx.screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import com.mygdx.game.TrashRubbishGame;
 
@@ -33,13 +36,27 @@ public class MainMenuScreen extends BasicScreen {
 
         table = new Table();
         table.setFillParent(true);
+        stage.addActor(table);
 
         startGameButton = new TextButton("Start Game", VisUI.getSkin());
         table.add(startGameButton).width(100);
+
         table.row();
         exitButton = new TextButton("Exit", VisUI.getSkin());
         table.add(exitButton).width(100);
 
-        stage.addActor(table);
+        startGameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(game));
+            }
+        });
+
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
     }
 }
