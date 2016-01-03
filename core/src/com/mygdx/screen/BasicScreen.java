@@ -4,6 +4,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.kotcrab.vis.ui.VisUI;
 import com.mygdx.game.TrashRubbishGame;
 import com.mygdx.util.Accumulator;
 
@@ -36,6 +37,7 @@ public abstract class BasicScreen extends InputAdapter implements Screen {
         multiplexer.addProcessor(this);
         multiplexer.addProcessor(stage);
         Gdx.input.setInputProcessor(multiplexer);
+        VisUI.load();
     }
 
     @Override
@@ -74,6 +76,7 @@ public abstract class BasicScreen extends InputAdapter implements Screen {
     public void dispose() {
         Gdx.app.log(getClass().getSimpleName(), "Dispose");
         stage.dispose();
+        VisUI.dispose();
     }
 
     @Override

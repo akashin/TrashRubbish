@@ -1,5 +1,6 @@
 package com.mygdx.screen;
 
+import com.kotcrab.vis.ui.VisUI;
 import com.mygdx.game.TrashRubbishGame;
 
 /**
