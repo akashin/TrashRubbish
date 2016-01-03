@@ -4,13 +4,9 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.kotcrab.vis.ui.VisUI;
 import com.mygdx.game.TrashRubbishGame;
 import com.mygdx.util.Accumulator;
 
-/**
- * Created by acid on 03/01/16.
- */
 public abstract class BasicScreen extends InputAdapter implements Screen {
     public static final float TIME_STEP = 1.0f / 60;
     public static final float MAX_DELTA = 0.25f;
@@ -20,8 +16,8 @@ public abstract class BasicScreen extends InputAdapter implements Screen {
 
     private final Accumulator accumulator;
 
-    public BasicScreen(final TrashRubbishGame game_) {
-        game = game_;
+    public BasicScreen(TrashRubbishGame game) {
+        this.game = game;
         accumulator = new Accumulator(TIME_STEP);
     }
 
@@ -37,7 +33,6 @@ public abstract class BasicScreen extends InputAdapter implements Screen {
         multiplexer.addProcessor(this);
         multiplexer.addProcessor(stage);
         Gdx.input.setInputProcessor(multiplexer);
-        VisUI.load();
     }
 
     @Override
@@ -76,7 +71,6 @@ public abstract class BasicScreen extends InputAdapter implements Screen {
     public void dispose() {
         Gdx.app.log(getClass().getSimpleName(), "Dispose");
         stage.dispose();
-        VisUI.dispose();
     }
 
     @Override

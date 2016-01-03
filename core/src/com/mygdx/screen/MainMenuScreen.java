@@ -8,16 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import com.mygdx.game.TrashRubbishGame;
 
-/**
- * Created by acid on 03/01/16.
- */
 public class MainMenuScreen extends BasicScreen {
     private Table table;
     private TextButton startGameButton;
     private TextButton exitButton;
 
-    public MainMenuScreen(final TrashRubbishGame game_) {
-        super(game_);
+    public MainMenuScreen(TrashRubbishGame game) {
+        super(game);
     }
 
     @Override

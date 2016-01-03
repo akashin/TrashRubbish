@@ -2,20 +2,19 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-/**
- * Created by acid on 03/01/16.
- */
 public class Ball extends Actor {
-    Texture boulderImage;
+    private Sprite boulderSprite;
 
-    public Ball(Texture boulderImage) {
-        this.boulderImage = boulderImage;
+    public Ball(TrashRubbishGame game) {
+        boulderSprite = new Sprite(game.getAssetManager().get("boulder.png", Texture.class));
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(boulderImage, getX(), getY());
+        boulderSprite.setPosition(getX(), getY());
+        boulderSprite.draw(batch, parentAlpha);
     }
 }
