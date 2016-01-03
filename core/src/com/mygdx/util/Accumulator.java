@@ -1,8 +1,5 @@
 package com.mygdx.util;
 
-/**
- * Created by acid on 03/01/16.
- */
 public class Accumulator {
     private float bound;
     private float value;
