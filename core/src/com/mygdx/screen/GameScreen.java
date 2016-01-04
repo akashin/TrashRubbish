@@ -1,13 +1,18 @@
 package com.mygdx.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Queue;
 import com.mygdx.actor.Ball;
 import com.mygdx.actor.Pedestal;
 import com.mygdx.game.TrashRubbishGame;
 import com.mygdx.actor.Wall;
+import com.mygdx.logic.Direction;
+import com.mygdx.logic.Event;
 import com.mygdx.logic.Level;
 
 import java.util.HashMap;
@@ -15,6 +20,9 @@ import java.util.HashMap;
 public class GameScreen extends BasicScreen {
     int cellHeight = 64;
     int cellWidth = 64;
+
+    Level level;
+    Queue<Event> eventQueue;
 
     public GameScreen(TrashRubbishGame game) {
         super(game);
@@ -46,8 +54,9 @@ public class GameScreen extends BasicScreen {
     public void show() {
         super.show();
 
+        eventQueue = new Queue<>();
         actors = new HashMap<>();
-        Level level = Level.createDefaultLevel();
+        level = Level.createDefaultLevel();
         System.err.println(level.toString());
 
         for (com.mygdx.logic.Ball ball : level.getBalls()) {
@@ -57,7 +66,25 @@ public class GameScreen extends BasicScreen {
             ballActor.addListener(new ActorGestureListener() {
                 @Override
                 public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
+                    float maxAbsDelta = Math.max(Math.abs(deltaX), Math.abs(deltaY));
+                    if (maxAbsDelta < 10) {
+                        return;
+                    }
+
                     Cell cell = vectorToCell(x, y);
+                    Direction direction;
+
+                    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                        direction = deltaX > 0 ? Direction.LEFT : Direction.RIGHT;
+                    } else {
+                        direction = deltaY > 0 ? Direction.UP : Direction.DOWN;
+                    }
+
+                    Array<Event> events = level.move(cell.row, cell.column, direction);
+                    Gdx.app.log("level.move", "Got " + events.size + " events");
+                    for (Event levelEvent : events) {
+                        eventQueue.addLast(levelEvent);
+                    }
                 }
             });
             actors.put(ball.id, ballActor);

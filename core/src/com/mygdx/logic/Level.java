@@ -75,7 +75,7 @@ public class Level {
         return false;
     }
 
-    Array<Event> move(int row, int column, Direction direction) {
+    public Array<Event> move(int row, int column, Direction direction) {
         Array<Event> events = new Array<Event>();
 
         Ball ball = findObject(row, column, balls);
