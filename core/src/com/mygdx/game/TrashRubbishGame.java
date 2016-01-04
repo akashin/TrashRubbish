@@ -9,10 +9,12 @@ import com.mygdx.screen.MainMenuScreen;
 public class TrashRubbishGame extends Game {
 	private AssetManager assetManager;
 
-	@Override
+    @Override
 	public void create() {
         assetManager = new AssetManager();
         assetManager.load("boulder.png", Texture.class);
+        assetManager.load("wall.png", Texture.class);
+        assetManager.load("pedestal.png", Texture.class);
         assetManager.finishLoading();
 
         VisUI.load();

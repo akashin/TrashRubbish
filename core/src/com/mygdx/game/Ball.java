@@ -1,6 +1,5 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -9,11 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 
 public class Ball extends Actor {
-    private Sprite boulderSprite;
+    private Sprite sprite;
 
     public Ball(TrashRubbishGame game) {
-        boulderSprite = new Sprite(game.getAssetManager().get("boulder.png", Texture.class));
-        setSize(boulderSprite.getWidth(), boulderSprite.getHeight());
+        sprite = new Sprite(game.getAssetManager().get("boulder.png", Texture.class));
+        sprite.setSize(64, 64);
+        setSize(sprite.getWidth(), sprite.getHeight());
 
         addListener(new ActorGestureListener() {
             @Override
@@ -26,7 +26,7 @@ public class Ball extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        boulderSprite.setPosition(getX(), getY());
-        boulderSprite.draw(batch, parentAlpha);
+        sprite.setPosition(getX(), getY());
+        sprite.draw(batch, parentAlpha);
     }
 }

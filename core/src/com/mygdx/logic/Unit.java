@@ -1,8 +1,8 @@
 package com.mygdx.logic;
 
 public class Unit {
-    int row, column;
-    int id;
+    public int row, column;
+    public int id;
 
     public Unit(int row, int column) {
         this.row = row;

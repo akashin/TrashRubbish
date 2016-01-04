@@ -21,9 +21,9 @@ public class Level {
 
         this.firstFreeObjectId = 1;
 
-        balls = new Array<Ball>();
-        pedestals = new Array<Pedestal>();
-        walls = new Array<Wall>();
+        balls = new Array<>();
+        pedestals = new Array<>();
+        walls = new Array<>();
     }
 
     int addBall(Ball ball) {
@@ -31,6 +31,18 @@ public class Level {
         ball.id = firstFreeObjectId++;
         balls.add(ball);
         return ball.id;
+    }
+
+    public Array<Ball> getBalls() {
+        return balls;
+    }
+
+    public Array<Pedestal> getPedestals() {
+        return pedestals;
+    }
+
+    public Array<Wall> getWalls() {
+        return walls;
     }
 
     int addPedestal(Pedestal pedestal) {
@@ -57,7 +69,7 @@ public class Level {
             return true;
         }
         Wall wall = findObject(row, column, walls);
-        if (walls != null) {
+        if (wall != null) {
             return true;
         }
         return false;
@@ -138,5 +150,14 @@ public class Level {
             builder.append("\n");
         }
         return builder.toString();
+    }
+
+    public static Level createDefaultLevel()
+    {
+        Level level = new Level(4, 4);
+        level.addBall(new Ball(0, 0, Color.RED));
+        level.addPedestal(new Pedestal(3, 3, Color.RED));
+        level.addWall(new Wall(0, 3));
+        return level;
     }
 }
