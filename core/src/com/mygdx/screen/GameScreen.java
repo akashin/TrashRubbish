@@ -4,11 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
 import com.mygdx.actor.Ball;
 import com.mygdx.actor.Pedestal;
+import com.mygdx.actor.action.BasicAction;
+import com.mygdx.actor.action.MovementAction;
 import com.mygdx.game.TrashRubbishGame;
 import com.mygdx.actor.Wall;
 import com.mygdx.logic.Direction;
@@ -23,7 +26,7 @@ public class GameScreen extends BasicScreen {
     int cellWidth = 64;
 
     Level level;
-    Queue<Event> eventQueue;
+    Queue<BasicAction> actionQueue;
 
     public GameScreen(TrashRubbishGame game) {
         super(game);
@@ -58,7 +61,7 @@ public class GameScreen extends BasicScreen {
     public void show() {
         super.show();
 
-        eventQueue = new Queue<>();
+        actionQueue = new Queue<>();
         actors = new HashMap<>();
         level = Level.createDefaultLevel();
         System.err.println(level.toString());
@@ -96,7 +99,13 @@ public class GameScreen extends BasicScreen {
                     System.err.println(level.toString());
                     Gdx.app.log("ballActor.fling", "Got " + events.size + " events");
                     for (Event levelEvent : events) {
-                        eventQueue.addLast(levelEvent);
+                        if (levelEvent instanceof Movement) {
+                            Movement movement = (Movement) levelEvent;
+                            Vector2 src = cellToVector(movement.srcRow, movement.srcColumn);
+                            Vector2 dst = cellToVector(movement.dstRow, movement.dstColumn);
+                            actionQueue.addLast(
+                                new MovementAction(src.x, src.y, dst.x, dst.y, actors.get(movement.objectId)));
+                        }
                     }
                 }
             });
@@ -125,12 +134,12 @@ public class GameScreen extends BasicScreen {
 
     @Override
     public void updateScreen(float delta) {
-        while (eventQueue.size != 0) {
-            Event event = eventQueue.removeFirst();
-            if (event instanceof Movement) {
-                Movement movement = (Movement) event;
-                Vector2 v = cellToVector(movement.dstRow, movement.dstColumn);
-                actors.get(movement.objectId).setPosition(v.x, v.y);
+        while (actionQueue.size != 0 && delta > 0) {
+            BasicAction action = actionQueue.removeFirst();
+            float change = action.act(delta);
+            delta -= change;
+            if (change > 0) {
+                actionQueue.addFirst(action);
             }
         }
         stage.act(delta);
