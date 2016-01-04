@@ -5,9 +5,18 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Level {
     int width, height;
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 
     int firstFreeObjectId;
 
@@ -75,14 +84,18 @@ public class Level {
         return false;
     }
 
-    public Array<Event> move(int row, int column, Direction direction) {
-        Array<Event> events = new Array<Event>();
-
-        Ball ball = findObject(row, column, balls);
-        if (ball == null) {
-            Gdx.app.log("Level::move", "No ball in (" + row + ", " + column + ")");
-            return events;
+    public Array<Event> move(int id, Direction direction) {
+        for (Ball ball : balls) {
+            if (ball.id == id) {
+                return move(ball, direction);
+            }
         }
+        Gdx.app.log("Level::move", "No ball with id (" + id + ")");
+        return new Array<Event>();
+    }
+
+    Array<Event> move(Ball ball, Direction direction) {
+        Array<Event> events = new Array<Event>();
 
         int dRow = 0;
         int dColumn = 0;
@@ -101,8 +114,8 @@ public class Level {
                 break;
         }
 
-        int curRow = row;
-        int curColumn = column;
+        int curRow = ball.row;
+        int curColumn = ball.column;
         while (true) {
             int nextRow = curRow + dRow;
             int nextColumn = curColumn + dColumn;

@@ -10,8 +10,10 @@ import com.mygdx.game.TrashRubbishGame;
 
 public class Ball extends Actor {
     private Sprite sprite;
+    public int id;
 
-    public Ball(TrashRubbishGame game) {
+    public Ball(int id, TrashRubbishGame game) {
+        this.id = id;
         sprite = new Sprite(game.getAssetManager().get("boulder.png", Texture.class));
         sprite.setSize(64, 64);
         setSize(sprite.getWidth(), sprite.getHeight());

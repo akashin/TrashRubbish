@@ -14,6 +14,7 @@ import com.mygdx.actor.Wall;
 import com.mygdx.logic.Direction;
 import com.mygdx.logic.Event;
 import com.mygdx.logic.Level;
+import com.mygdx.logic.Movement;
 
 import java.util.HashMap;
 
@@ -42,12 +43,15 @@ public class GameScreen extends BasicScreen {
 
     Vector2 cellToVector(int row, int column)
     {
-        return new Vector2(row * cellHeight, column * cellWidth);
+        row = level.getHeight() - row - 1;
+        return new Vector2(column * cellWidth, row * cellHeight);
     }
 
     Cell vectorToCell(float x, float y)
     {
-        return new Cell((int)(x / cellHeight), (int)(y / cellWidth));
+        int row = level.getHeight() - (int)(y / cellHeight) - 1;
+        int column = (int)(x / cellWidth);
+        return new Cell(row, column);
     }
 
     @Override
@@ -60,7 +64,7 @@ public class GameScreen extends BasicScreen {
         System.err.println(level.toString());
 
         for (final com.mygdx.logic.Ball ball : level.getBalls()) {
-            final Ball ballActor = new Ball(game);
+            final Ball ballActor = new Ball(ball.id, game);
             Vector2 v = cellToVector(ball.row, ball.column);
             ballActor.setPosition(v.x, v.y);
             ballActor.addListener(new ActorGestureListener() {
@@ -75,12 +79,12 @@ public class GameScreen extends BasicScreen {
                     Direction direction;
 
                     if (Math.abs(velocityX) > Math.abs(velocityY)) {
-                        direction = velocityX > 0 ? Direction.LEFT : Direction.RIGHT;
+                        direction = velocityX > 0 ? Direction.RIGHT : Direction.LEFT;
                     } else {
                         direction = velocityY > 0 ? Direction.UP : Direction.DOWN;
                     }
 
-                    Array<Event> events = level.move(cell.row, cell.column, direction);
+                    Array<Event> events = level.move(ballActor.id, direction);
                     System.err.println(level.toString());
                     Gdx.app.log("ballActor.fling", "Got " + events.size + " events");
                     for (Event levelEvent : events) {
