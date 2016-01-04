@@ -1,14 +1,13 @@
 package com.mygdx.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
-import com.mygdx.game.Ball;
-import com.mygdx.game.Pedestal;
+import com.mygdx.actor.Ball;
+import com.mygdx.actor.Pedestal;
 import com.mygdx.game.TrashRubbishGame;
-import com.mygdx.game.Wall;
+import com.mygdx.actor.Wall;
 import com.mygdx.logic.Level;
 
 import java.util.HashMap;
@@ -23,9 +22,24 @@ public class GameScreen extends BasicScreen {
 
     HashMap<Integer, Actor> actors;
 
+    class Cell
+    {
+        int row, column;
+
+        public Cell(int row, int column) {
+            this.row = row;
+            this.column = column;
+        }
+    };
+
     Vector2 cellToVector(int row, int column)
     {
         return new Vector2(row * cellHeight, column * cellWidth);
+    }
+
+    Cell vectorToCell(float x, float y)
+    {
+        return new Cell((int)(x / cellHeight), (int)(y / cellWidth));
     }
 
     @Override
@@ -40,6 +54,12 @@ public class GameScreen extends BasicScreen {
             Ball ballActor = new Ball(game);
             Vector2 v = cellToVector(ball.row, ball.column);
             ballActor.setPosition(v.x, v.y);
+            ballActor.addListener(new ActorGestureListener() {
+                @Override
+                public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
+                    Cell cell = vectorToCell(x, y);
+                }
+            });
             actors.put(ball.id, ballActor);
             stage.addActor(ballActor);
         }
