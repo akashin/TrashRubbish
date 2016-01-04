@@ -63,6 +63,14 @@ public class GameScreen extends BasicScreen {
         level = Level.createDefaultLevel();
         System.err.println(level.toString());
 
+        for (com.mygdx.logic.Pedestal pedestal : level.getPedestals()) {
+            Pedestal pedestalActor = new Pedestal(game);
+            Vector2 v = cellToVector(pedestal.row, pedestal.column);
+            pedestalActor.setPosition(v.x, v.y);
+            actors.put(pedestal.id, pedestalActor);
+            stage.addActor(pedestalActor);
+        }
+
         for (final com.mygdx.logic.Ball ball : level.getBalls()) {
             final Ball ballActor = new Ball(ball.id, game);
             Vector2 v = cellToVector(ball.row, ball.column);
@@ -96,14 +104,6 @@ public class GameScreen extends BasicScreen {
             stage.addActor(ballActor);
         }
 
-        for (com.mygdx.logic.Pedestal pedestal : level.getPedestals()) {
-            Pedestal pedestalActor = new Pedestal(game);
-            Vector2 v = cellToVector(pedestal.row, pedestal.column);
-            pedestalActor.setPosition(v.x, v.y);
-            actors.put(pedestal.id, pedestalActor);
-            stage.addActor(pedestalActor);
-        }
-
         for (com.mygdx.logic.Wall wall : level.getWalls()) {
             Wall wallActor = new Wall(game);
             Vector2 v = cellToVector(wall.row, wall.column);
@@ -125,6 +125,14 @@ public class GameScreen extends BasicScreen {
 
     @Override
     public void updateScreen(float delta) {
+        while (eventQueue.size != 0) {
+            Event event = eventQueue.removeFirst();
+            if (event instanceof Movement) {
+                Movement movement = (Movement) event;
+                Vector2 v = cellToVector(movement.dstRow, movement.dstColumn);
+                actors.get(movement.objectId).setPosition(v.x, v.y);
+            }
+        }
         stage.act(delta);
     }
 }

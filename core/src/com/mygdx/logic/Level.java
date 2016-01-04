@@ -169,6 +169,7 @@ public class Level {
     {
         Level level = new Level(4, 4);
         level.addBall(new Ball(0, 0, Color.RED));
+        level.addBall(new Ball(1, 0, Color.RED));
         level.addPedestal(new Pedestal(3, 3, Color.RED));
         level.addWall(new Wall(0, 3));
         return level;
