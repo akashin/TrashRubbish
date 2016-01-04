@@ -168,10 +168,12 @@ public class Level {
     public static Level createDefaultLevel()
     {
         Level level = new Level(4, 4);
-        level.addBall(new Ball(0, 0, Color.RED));
-        level.addBall(new Ball(1, 0, Color.RED));
-        level.addPedestal(new Pedestal(3, 3, Color.RED));
+        level.addBall(new Ball(0, 2, Color.BLUE));
+        level.addBall(new Ball(3, 1, Color.RED));
+        level.addPedestal(new Pedestal(0, 1, Color.BLUE));
+        level.addPedestal(new Pedestal(3, 2, Color.RED));
         level.addWall(new Wall(0, 3));
+        level.addWall(new Wall(3, 0));
         return level;
     }
 }

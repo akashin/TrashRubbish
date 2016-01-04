@@ -64,7 +64,7 @@ public class GameScreen extends BasicScreen {
         System.err.println(level.toString());
 
         for (com.mygdx.logic.Pedestal pedestal : level.getPedestals()) {
-            Pedestal pedestalActor = new Pedestal(game);
+            Pedestal pedestalActor = new Pedestal(pedestal.color, game);
             Vector2 v = cellToVector(pedestal.row, pedestal.column);
             pedestalActor.setPosition(v.x, v.y);
             actors.put(pedestal.id, pedestalActor);
@@ -72,7 +72,7 @@ public class GameScreen extends BasicScreen {
         }
 
         for (final com.mygdx.logic.Ball ball : level.getBalls()) {
-            final Ball ballActor = new Ball(ball.id, game);
+            final Ball ballActor = new Ball(ball.id, ball.color, game);
             Vector2 v = cellToVector(ball.row, ball.column);
             ballActor.setPosition(v.x, v.y);
             ballActor.addListener(new ActorGestureListener() {
