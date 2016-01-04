@@ -59,29 +59,30 @@ public class GameScreen extends BasicScreen {
         level = Level.createDefaultLevel();
         System.err.println(level.toString());
 
-        for (com.mygdx.logic.Ball ball : level.getBalls()) {
-            Ball ballActor = new Ball(game);
+        for (final com.mygdx.logic.Ball ball : level.getBalls()) {
+            final Ball ballActor = new Ball(game);
             Vector2 v = cellToVector(ball.row, ball.column);
             ballActor.setPosition(v.x, v.y);
             ballActor.addListener(new ActorGestureListener() {
                 @Override
-                public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
-                    float maxAbsDelta = Math.max(Math.abs(deltaX), Math.abs(deltaY));
+                public void fling(InputEvent event, float velocityX, float velocityY, int button) {
+                    float maxAbsDelta = Math.max(Math.abs(velocityX), Math.abs(velocityY));
                     if (maxAbsDelta < 10) {
                         return;
                     }
 
-                    Cell cell = vectorToCell(x, y);
+                    Cell cell = vectorToCell(ballActor.getX(), ballActor.getY());
                     Direction direction;
 
-                    if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                        direction = deltaX > 0 ? Direction.LEFT : Direction.RIGHT;
+                    if (Math.abs(velocityX) > Math.abs(velocityY)) {
+                        direction = velocityX > 0 ? Direction.LEFT : Direction.RIGHT;
                     } else {
-                        direction = deltaY > 0 ? Direction.UP : Direction.DOWN;
+                        direction = velocityY > 0 ? Direction.UP : Direction.DOWN;
                     }
 
                     Array<Event> events = level.move(cell.row, cell.column, direction);
-                    Gdx.app.log("level.move", "Got " + events.size + " events");
+                    System.err.println(level.toString());
+                    Gdx.app.log("ballActor.fling", "Got " + events.size + " events");
                     for (Event levelEvent : events) {
                         eventQueue.addLast(levelEvent);
                     }
