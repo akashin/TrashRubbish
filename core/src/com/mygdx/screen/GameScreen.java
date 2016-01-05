@@ -1,12 +1,14 @@
 package com.mygdx.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Queue;
 import com.mygdx.actor.Ball;
 import com.mygdx.actor.Pedestal;
@@ -64,6 +66,11 @@ public class GameScreen extends BasicScreen {
         actionQueue = new Queue<>();
         actors = new HashMap<>();
         level = Level.createDefaultLevel();
+//        FileHandle handle = Gdx.files.internal("levels/1.json");
+        Json json = new Json();
+//        level = json.fromJson(Level.class, handle);
+        String jsonRepr = json.toJson(level);
+        System.err.println(jsonRepr);
         System.err.println(level.toString());
 
         for (com.mygdx.logic.Pedestal pedestal : level.getPedestals()) {

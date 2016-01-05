@@ -2,12 +2,13 @@ package com.mygdx.logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.StringBuilder;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
-public class Level {
+public class Level implements Json.Serializable {
     int width, height;
 
     public int getWidth() {
@@ -18,21 +19,18 @@ public class Level {
         return height;
     }
 
-    int firstFreeObjectId;
+    int firstFreeObjectId = 1;
 
-    Array<Ball> balls;
-    Array<Pedestal> pedestals;
-    Array<Wall> walls;
+    Array<Ball> balls = new Array<>();
+    Array<Pedestal> pedestals = new Array<>();
+    Array<Wall> walls = new Array<>();
+
+    private Level() {
+    }
 
     public Level(int width, int height) {
         this.width = width;
         this.height = height;
-
-        this.firstFreeObjectId = 1;
-
-        balls = new Array<>();
-        pedestals = new Array<>();
-        walls = new Array<>();
     }
 
     int addBall(Ball ball) {
@@ -175,5 +173,47 @@ public class Level {
         level.addWall(new Wall(0, 3));
         level.addWall(new Wall(3, 0));
         return level;
+    }
+
+    @Override
+    public void write(Json json) {
+        json.writeValue("height", height);
+        json.writeValue("width", width);
+
+        json.writeArrayStart("pedestals");
+        for (Pedestal pedestal : pedestals) {
+            json.writeValue(pedestal);
+        }
+        json.writeArrayEnd();
+
+        json.writeArrayStart("balls");
+        for (Ball ball : balls) {
+            json.writeValue(ball);
+        }
+        json.writeArrayEnd();
+
+        json.writeArrayStart("walls");
+        for (Wall wall : walls) {
+            json.writeValue(wall);
+        }
+        json.writeArrayEnd();
+    }
+
+    @Override
+    public void read(Json json, JsonValue jsonData) {
+        height = jsonData.getInt("height");
+        width = jsonData.getInt("width");
+        Array<Pedestal> jsonPedestals = json.readValue("pedestals", Array.class, Pedestal.class, jsonData);
+        for (Pedestal pedestal : jsonPedestals) {
+            addPedestal(pedestal);
+        }
+        Array<Wall> jsonWalls = json.readValue("walls", Array.class, Wall.class, jsonData);
+        for (Wall wall : jsonWalls) {
+            addWall(wall);
+        }
+        Array<Ball> jsonBalls = json.readValue("balls", Array.class, Ball.class, jsonData);
+        for (Ball ball : jsonBalls) {
+            addBall(ball);
+        }
     }
 }
