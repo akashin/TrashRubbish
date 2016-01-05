@@ -1,11 +1,9 @@
 package com.mygdx.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
@@ -48,13 +46,13 @@ public class GameScreen extends BasicScreen {
 
     Vector2 cellToVector(int row, int column)
     {
-        row = level.getHeight() - row - 1;
+        row = level.getRows() - row - 1;
         return new Vector2(column * cellWidth, row * cellHeight);
     }
 
     Cell vectorToCell(float x, float y)
     {
-        int row = level.getHeight() - (int)(y / cellHeight) - 1;
+        int row = level.getRows() - (int)(y / cellHeight) - 1;
         int column = (int)(x / cellWidth);
         return new Cell(row, column);
     }

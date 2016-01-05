@@ -9,14 +9,14 @@ import com.badlogic.gdx.utils.StringBuilder;
 import java.util.Arrays;
 
 public class Level implements Json.Serializable {
-    int width, height;
+    int rows, columns;
 
-    public int getWidth() {
-        return width;
+    public int getRows() {
+        return rows;
     }
 
-    public int getHeight() {
-        return height;
+    public int getColumns() {
+        return columns;
     }
 
     int firstFreeObjectId = 1;
@@ -28,9 +28,9 @@ public class Level implements Json.Serializable {
     private Level() {
     }
 
-    public Level(int width, int height) {
-        this.width = width;
-        this.height = height;
+    public Level(int rows, int columns) {
+        this.rows = rows;
+        this.columns = columns;
     }
 
     int addBall(Ball ball) {
@@ -67,7 +67,7 @@ public class Level implements Json.Serializable {
     }
 
     boolean isOnField(int row, int column) {
-        return (row >= 0 && column >= 0) && (row < height && column < width);
+        return (row >= 0 && column >= 0) && (row < rows && column < columns);
     }
 
     boolean isOccupied(int row, int column) {
@@ -141,8 +141,8 @@ public class Level implements Json.Serializable {
 
     @Override
     public String toString() {
-        char array[][] = new char[height][width];
-        for (int row = 0; row < height; ++row) {
+        char array[][] = new char[rows][columns];
+        for (int row = 0; row < rows; ++row) {
             Arrays.fill(array[row], '.');
         }
         for (Ball ball : balls) {
@@ -156,7 +156,7 @@ public class Level implements Json.Serializable {
         }
 
         StringBuilder builder = new StringBuilder();
-        for (int row = 0; row < height; ++row) {
+        for (int row = 0; row < rows; ++row) {
             builder.append(array[row]);
             builder.append("\n");
         }
@@ -177,8 +177,8 @@ public class Level implements Json.Serializable {
 
     @Override
     public void write(Json json) {
-        json.writeValue("height", height);
-        json.writeValue("width", width);
+        json.writeValue("rows", rows);
+        json.writeValue("columns", columns);
 
         json.writeArrayStart("pedestals");
         for (Pedestal pedestal : pedestals) {
@@ -201,8 +201,8 @@ public class Level implements Json.Serializable {
 
     @Override
     public void read(Json json, JsonValue jsonData) {
-        height = jsonData.getInt("height");
-        width = jsonData.getInt("width");
+        rows = jsonData.getInt("rows");
+        columns = jsonData.getInt("columns");
         Array<Pedestal> jsonPedestals = json.readValue("pedestals", Array.class, Pedestal.class, jsonData);
         for (Pedestal pedestal : jsonPedestals) {
             addPedestal(pedestal);
