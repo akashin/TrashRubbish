@@ -73,8 +73,8 @@ public class GameScreen extends BasicScreen {
         System.err.println(level.toString());
 
         LevelBackground levelBackground = new LevelBackground(
-                level.getHeight(),
-                level.getWidth(),
+                level.getRows(),
+                level.getColumns(),
                 game.getAssetManager()
         );
         stage.addActor(levelBackground);
