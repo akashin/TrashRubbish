@@ -9,11 +9,12 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Queue;
 import com.mygdx.actor.Ball;
+import com.mygdx.actor.LevelBackground;
 import com.mygdx.actor.Pedestal;
+import com.mygdx.actor.Wall;
 import com.mygdx.actor.action.BasicAction;
 import com.mygdx.actor.action.MovementAction;
 import com.mygdx.game.TrashRubbishGame;
-import com.mygdx.actor.Wall;
 import com.mygdx.logic.Direction;
 import com.mygdx.logic.Event;
 import com.mygdx.logic.Level;
@@ -71,6 +72,13 @@ public class GameScreen extends BasicScreen {
         System.err.println(jsonRepr);
         System.err.println(level.toString());
 
+        LevelBackground levelBackground = new LevelBackground(
+                level.getHeight(),
+                level.getWidth(),
+                game.getAssetManager()
+        );
+        stage.addActor(levelBackground);
+
         for (com.mygdx.logic.Pedestal pedestal : level.getPedestals()) {
             Pedestal pedestalActor = new Pedestal(pedestal.color, game);
             Vector2 v = cellToVector(pedestal.row, pedestal.column);
@@ -109,7 +117,7 @@ public class GameScreen extends BasicScreen {
                             Vector2 src = cellToVector(movement.srcRow, movement.srcColumn);
                             Vector2 dst = cellToVector(movement.dstRow, movement.dstColumn);
                             actionQueue.addLast(
-                                new MovementAction(src.x, src.y, dst.x, dst.y, actors.get(movement.objectId)));
+                                    new MovementAction(src.x, src.y, dst.x, dst.y, actors.get(movement.objectId)));
                         }
                     }
                 }

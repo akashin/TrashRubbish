@@ -15,6 +15,7 @@ public class TrashRubbishGame extends Game {
         assetManager.load("boulder.png", Texture.class);
         assetManager.load("wall.png", Texture.class);
         assetManager.load("pedestal.png", Texture.class);
+        assetManager.load("floor2.png", Texture.class);
         assetManager.finishLoading();
 
         VisUI.load();
