@@ -1,11 +1,9 @@
 package com.mygdx.logic;
 
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonValue;
-
-public class Unit {
-    public int row, column;
-    public int id;
+public abstract class Unit {
+    private int row;
+    private int column;
+    private int id;
 
     protected Unit() {}
 
@@ -13,4 +11,32 @@ public class Unit {
         this.row = row;
         this.column = column;
     }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public abstract boolean blocksMovement();
+
+    public abstract char getLetter();
 }

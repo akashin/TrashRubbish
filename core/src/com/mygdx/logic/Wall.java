@@ -6,4 +6,14 @@ public class Wall extends Unit {
     public Wall(int row, int column) {
         super(row, column);
     }
+
+    @Override
+    public boolean blocksMovement() {
+        return true;
+    }
+
+    @Override
+    public char getLetter() {
+        return '#';
+    }
 }

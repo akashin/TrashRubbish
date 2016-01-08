@@ -3,58 +3,55 @@ package com.mygdx.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Queue;
-import com.mygdx.actor.Ball;
+import com.mygdx.actor.BallActor;
 import com.mygdx.actor.LevelBackground;
-import com.mygdx.actor.Pedestal;
-import com.mygdx.actor.Wall;
+import com.mygdx.actor.PedestalActor;
+import com.mygdx.actor.WallActor;
 import com.mygdx.actor.action.BasicAction;
 import com.mygdx.actor.action.MovementAction;
 import com.mygdx.game.TrashRubbishGame;
-import com.mygdx.logic.Direction;
-import com.mygdx.logic.Event;
-import com.mygdx.logic.Level;
-import com.mygdx.logic.Movement;
+import com.mygdx.logic.*;
 
 import java.util.HashMap;
 
 public class GameScreen extends BasicScreen {
-    int cellHeight = 64;
-    int cellWidth = 64;
+    static final int CELL_HEIGHT = 64;
+    static final int CELL_WIDTH = 64;
 
-    Level level;
-    Queue<BasicAction> actionQueue;
+    private Level level;
+    private Queue<BasicAction> actionQueue;
+
+    private HashMap<Integer, Actor> actors;
+    private Group background;
+    private Group foreground;
 
     public GameScreen(TrashRubbishGame game) {
         super(game);
     }
 
-    HashMap<Integer, Actor> actors;
-
-    class Cell
-    {
+    class Cell {
         int row, column;
 
         public Cell(int row, int column) {
             this.row = row;
             this.column = column;
         }
-    };
-
-    Vector2 cellToVector(int row, int column)
-    {
-        row = level.getRows() - row - 1;
-        return new Vector2(column * cellWidth, row * cellHeight);
     }
 
-    Cell vectorToCell(float x, float y)
-    {
-        int row = level.getRows() - (int)(y / cellHeight) - 1;
-        int column = (int)(x / cellWidth);
+    public Vector2 cellToVector(int row, int column) {
+        row = level.getRows() - row - 1;
+        return new Vector2(column * CELL_WIDTH, row * CELL_HEIGHT);
+    }
+
+    public Cell vectorToCell(float x, float y) {
+        int row = level.getRows() - (int)(y / CELL_HEIGHT) - 1;
+        int column = (int)(x / CELL_WIDTH);
         return new Cell(row, column);
     }
 
@@ -79,59 +76,63 @@ public class GameScreen extends BasicScreen {
         );
         stage.addActor(levelBackground);
 
-        for (com.mygdx.logic.Pedestal pedestal : level.getPedestals()) {
-            Pedestal pedestalActor = new Pedestal(pedestal.color, game);
-            Vector2 v = cellToVector(pedestal.row, pedestal.column);
-            pedestalActor.setPosition(v.x, v.y);
-            actors.put(pedestal.id, pedestalActor);
-            stage.addActor(pedestalActor);
-        }
+        background = new Group();
+        foreground = new Group();
 
-        for (final com.mygdx.logic.Ball ball : level.getBalls()) {
-            final Ball ballActor = new Ball(ball.id, ball.color, game);
-            Vector2 v = cellToVector(ball.row, ball.column);
-            ballActor.setPosition(v.x, v.y);
-            ballActor.addListener(new ActorGestureListener() {
-                @Override
-                public void fling(InputEvent event, float velocityX, float velocityY, int button) {
-                    float maxAbsDelta = Math.max(Math.abs(velocityX), Math.abs(velocityY));
-                    if (maxAbsDelta < 10) {
-                        return;
-                    }
+        stage.addActor(background);
+        stage.addActor(foreground);
 
-                    Cell cell = vectorToCell(ballActor.getX(), ballActor.getY());
-                    Direction direction;
+        for (final Unit unit : level.getUnits()) {
+            Actor actor = null;
+            if (unit instanceof Ball) {
+                actor = new BallActor((Ball)unit, game.getAssetManager());
+                actor.addListener(new ActorGestureListener() {
+                    @Override
+                    public void fling(InputEvent event, float velocityX, float velocityY, int button) {
+                        float maxAbsDelta = Math.max(Math.abs(velocityX), Math.abs(velocityY));
+                        if (maxAbsDelta < 10) {
+                            return;
+                        }
 
-                    if (Math.abs(velocityX) > Math.abs(velocityY)) {
-                        direction = velocityX > 0 ? Direction.RIGHT : Direction.LEFT;
-                    } else {
-                        direction = velocityY > 0 ? Direction.UP : Direction.DOWN;
-                    }
+                        Direction direction;
+                        if (Math.abs(velocityX) > Math.abs(velocityY)) {
+                            direction = velocityX > 0 ? Direction.RIGHT : Direction.LEFT;
+                        } else {
+                            direction = velocityY > 0 ? Direction.UP : Direction.DOWN;
+                        }
 
-                    Array<Event> events = level.move(ballActor.id, direction);
-                    System.err.println(level.toString());
-                    Gdx.app.log("ballActor.fling", "Got " + events.size + " events");
-                    for (Event levelEvent : events) {
-                        if (levelEvent instanceof Movement) {
-                            Movement movement = (Movement) levelEvent;
-                            Vector2 src = cellToVector(movement.srcRow, movement.srcColumn);
-                            Vector2 dst = cellToVector(movement.dstRow, movement.dstColumn);
-                            actionQueue.addLast(
-                                    new MovementAction(src.x, src.y, dst.x, dst.y, actors.get(movement.objectId)));
+                        Array<Event> events = level.move(unit.getId(), direction);
+                        System.err.println(level.toString());
+                        Gdx.app.log("ballActor.fling", "Got " + events.size + " events");
+                        for (Event levelEvent : events) {
+                            if (levelEvent instanceof Movement) {
+                                Movement movement = (Movement) levelEvent;
+                                Vector2 src = cellToVector(movement.srcRow, movement.srcColumn);
+                                Vector2 dst = cellToVector(movement.dstRow, movement.dstColumn);
+                                actionQueue.addLast(new MovementAction(
+                                        src.x,
+                                        src.y,
+                                        dst.x,
+                                        dst.y,
+                                        actors.get(movement.objectId)
+                                ));
+                            }
                         }
                     }
-                }
-            });
-            actors.put(ball.id, ballActor);
-            stage.addActor(ballActor);
-        }
-
-        for (com.mygdx.logic.Wall wall : level.getWalls()) {
-            Wall wallActor = new Wall(game);
-            Vector2 v = cellToVector(wall.row, wall.column);
-            wallActor.setPosition(v.x, v.y);
-            actors.put(wall.id, wallActor);
-            stage.addActor(wallActor);
+                });
+                foreground.addActor(actor);
+            } else if (unit instanceof Wall) {
+                actor = new WallActor((Wall)unit, game.getAssetManager());
+                foreground.addActor(actor);
+            } else if (unit instanceof Pedestal) {
+                actor = new PedestalActor((Pedestal)unit, game.getAssetManager());
+                background.addActor(actor);
+            }
+            if (actor != null) {
+                Vector2 position = cellToVector(unit.getRow(), unit.getColumn());
+                actor.setPosition(position.x, position.y);
+            }
+            actors.put(unit.getId(), actor);
         }
     }
 
