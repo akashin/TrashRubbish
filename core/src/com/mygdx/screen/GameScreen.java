@@ -20,19 +20,22 @@ import com.mygdx.logic.*;
 import com.mygdx.logic.event.Event;
 import com.mygdx.logic.event.LevelCompleted;
 import com.mygdx.logic.event.Movement;
+import com.mygdx.util.Constants;
 
 import java.util.HashMap;
 
 public class GameScreen extends BasicScreen {
-    static final int CELL_HEIGHT = 64;
-    static final int CELL_WIDTH = 64;
-
     private Level level;
     private Queue<BasicAction> actionQueue;
 
     private HashMap<Integer, Actor> actors;
+    private Group levelGroup;
     private Group background;
     private Group foreground;
+
+    private static final int MAX_CELLS = 6;
+    private static final float LEVEL_SIZE = 0.9f;
+    private float scale;
 
     public GameScreen(TrashRubbishGame game) {
         super(game);
@@ -49,12 +52,12 @@ public class GameScreen extends BasicScreen {
 
     public Vector2 cellToVector(int row, int column) {
         row = level.getRows() - row - 1;
-        return new Vector2(column * CELL_WIDTH, row * CELL_HEIGHT);
+        return new Vector2(column * Constants.CELL_SIZE, row * Constants.CELL_SIZE);
     }
 
     public Cell vectorToCell(float x, float y) {
-        int row = level.getRows() - (int)(y / CELL_HEIGHT) - 1;
-        int column = (int)(x / CELL_WIDTH);
+        int row = level.getRows() - (int)(y / Constants.CELL_SIZE) - 1;
+        int column = (int)(x / Constants.CELL_SIZE);
         return new Cell(row, column);
     }
 
@@ -72,18 +75,29 @@ public class GameScreen extends BasicScreen {
 
         System.err.println(level.toString());
 
+        levelGroup = new Group();
+        updateScale(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        levelGroup.setScale(scale);
+
         LevelBackground levelBackground = new LevelBackground(
                 level.getRows(),
                 level.getColumns(),
                 game.getAssetManager()
         );
-        stage.addActor(levelBackground);
+        levelGroup.addActor(levelBackground);
+
+        levelGroup.setSize(
+                level.getColumns() * Constants.CELL_SIZE,
+                level.getRows() * Constants.CELL_SIZE
+        );
 
         background = new Group();
-        foreground = new Group();
+        levelGroup.addActor(background);
 
-        stage.addActor(background);
-        stage.addActor(foreground);
+        foreground = new Group();
+        levelGroup.addActor(foreground);
+
+        stage.addActor(levelGroup);
 
         for (final Unit unit : level.getUnits()) {
             Actor actor = null;
@@ -166,5 +180,21 @@ public class GameScreen extends BasicScreen {
             }
         }
         stage.act(delta);
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        updateScale(width, height);
+        levelGroup.setScale(scale);
+        levelGroup.setPosition(
+                (width - levelGroup.getWidth() * scale) / 2,
+                (height - levelGroup.getHeight() * scale) / 2
+        );
+    }
+
+    private void updateScale(int width, int height) {
+        float size = Math.min(width, height);
+        scale = ((size * LEVEL_SIZE) / MAX_CELLS) / Constants.CELL_SIZE;
     }
 }
