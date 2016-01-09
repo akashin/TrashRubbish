@@ -5,6 +5,9 @@ public abstract class TimedAction implements BasicAction {
     protected float elapsed;
 
     public TimedAction(float duration) {
+        if (duration <= 0) {
+            throw new IllegalStateException("Duration should be more than zero");
+        }
         this.duration = duration;
         elapsed = 0;
     }
@@ -22,9 +25,6 @@ public abstract class TimedAction implements BasicAction {
     }
 
     public float getState() {
-        if (duration == 0) {
-            return 1;
-        }
         return elapsed / duration;
     }
 }
