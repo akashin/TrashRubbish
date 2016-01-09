@@ -24,6 +24,10 @@ public class Pipe extends Unit {
         return Direction.NONE;
     }
 
+    public Direction[] getDirections() {
+        return directions;
+    }
+
     @Override
     public char getLetter() {
         return '=';

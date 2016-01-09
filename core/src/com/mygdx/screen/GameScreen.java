@@ -9,10 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Queue;
-import com.mygdx.actor.BallActor;
-import com.mygdx.actor.LevelBackground;
-import com.mygdx.actor.PedestalActor;
-import com.mygdx.actor.WallActor;
+import com.mygdx.actor.*;
 import com.mygdx.actor.action.BasicAction;
 import com.mygdx.actor.action.MovementAction;
 import com.mygdx.game.TrashRubbishGame;
@@ -69,9 +66,10 @@ public class GameScreen extends BasicScreen {
         actors = new HashMap<>();
 
         // Load level from file.
-        Json json = new Json();
-        json.setUsePrototypes(false);
-        level = json.fromJson(Level.class, Gdx.files.internal("levels/1.json"));
+//        Json json = new Json();
+//        json.setUsePrototypes(false);
+//        level = json.fromJson(Level.class, Gdx.files.internal("levels/1.json"));
+        level = Level.createDefaultLevel();
 
         System.err.println(level.toString());
 
@@ -148,6 +146,9 @@ public class GameScreen extends BasicScreen {
                 foreground.addActor(actor);
             } else if (unit instanceof Pedestal) {
                 actor = new PedestalActor((Pedestal)unit, game.getAssetManager());
+                background.addActor(actor);
+            } else if (unit instanceof Pipe) {
+                actor = new PipeActor((Pipe)unit, game.getAssetManager());
                 background.addActor(actor);
             }
             if (actor != null) {
