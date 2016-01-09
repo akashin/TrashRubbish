@@ -22,6 +22,9 @@ public abstract class TimedAction implements BasicAction {
     }
 
     public float getState() {
+        if (duration == 0) {
+            return 1;
+        }
         return elapsed / duration;
     }
 }
