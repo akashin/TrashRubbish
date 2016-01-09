@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.logic.Wall;
 
-public class WallActor extends Actor{
+public class WallActor extends Actor {
     private Wall wall;
     private Sprite sprite;
 

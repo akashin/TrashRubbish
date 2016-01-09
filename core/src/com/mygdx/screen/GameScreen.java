@@ -156,12 +156,13 @@ public class GameScreen extends BasicScreen {
 
     @Override
     public void updateScreen(float delta) {
-        while (actionQueue.size != 0 && delta > 0) {
-            BasicAction action = actionQueue.removeFirst();
-            float change = action.act(delta);
-            delta -= change;
-            if (change > 0) {
-                actionQueue.addFirst(action);
+        while (actionQueue.size != 0) {
+            BasicAction action = actionQueue.first();
+            delta -= action.act(delta);
+            if (action.finished()) {
+                actionQueue.removeFirst();
+            } else {
+                break;
             }
         }
         stage.act(delta);
