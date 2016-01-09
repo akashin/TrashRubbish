@@ -36,7 +36,7 @@ public abstract class Unit {
         this.id = id;
     }
 
-    public abstract boolean blocksMovement();
+    public abstract boolean blocksMovement(Direction direction);
 
     public abstract char getLetter();
 }

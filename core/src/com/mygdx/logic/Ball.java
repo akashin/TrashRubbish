@@ -8,7 +8,7 @@ public class Ball extends ColoredUnit {
     }
 
     @Override
-    public boolean blocksMovement() {
+    public boolean blocksMovement(Direction direction) {
         return true;
     }
 

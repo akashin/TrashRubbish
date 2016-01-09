@@ -50,16 +50,6 @@ public class Level implements Json.Serializable {
         return (row >= 0 && column >= 0) && (row < rows && column < columns);
     }
 
-    public boolean isOccupied(int row, int column) {
-        Array<Unit> cellUnits = findUnits(row, column);
-        for (Unit unit : cellUnits) {
-            if (unit.blocksMovement()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private boolean isCompleted() {
         for (Ball ball : getBalls()) {
             Array<Unit> cellUnits = findUnits(ball.getRow(), ball.getColumn());
@@ -97,8 +87,14 @@ public class Level implements Json.Serializable {
         while (true) {
             int nextRow = row + direction.dRow;
             int nextColumn = column + direction.dColumn;
-            if (!isOnField(nextRow, nextColumn) || isOccupied(nextRow, nextColumn)) {
+            if (!isOnField(nextRow, nextColumn)) {
                 break;
+            }
+            Array<Unit> cellUnits = findUnits(row, column);
+            for (Unit unit : cellUnits) {
+                if (unit.blocksMovement(direction)) {
+                    break;
+                }
             }
             row = nextRow;
             column = nextColumn;

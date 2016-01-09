@@ -8,7 +8,7 @@ public class Pedestal extends ColoredUnit{
     }
 
     @Override
-    public boolean blocksMovement() {
+    public boolean blocksMovement(Direction direction) {
         return false;
     }
 

@@ -8,7 +8,7 @@ public class Wall extends Unit {
     }
 
     @Override
-    public boolean blocksMovement() {
+    public boolean blocksMovement(Direction direction) {
         return true;
     }
 
