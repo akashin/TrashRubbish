@@ -1,5 +1,8 @@
 package com.mygdx.logic;
 
+import com.badlogic.gdx.utils.Array;
+import com.mygdx.logic.event.Event;
+
 public class Pipe extends Unit {
     Direction[] directions = new Direction[2];
 
@@ -12,13 +15,13 @@ public class Pipe extends Unit {
     }
 
     @Override
-    public boolean blocksMovement(Direction direction) {
+    public Direction interact(Ball ball, Direction direction, Array<Event> events) {
         for (int i = 0; i < 2; ++i) {
             if (directions[i].getOpposite() == direction) {
-                return false;
+                return directions[1 - i];
             }
         }
-        return true;
+        return Direction.NONE;
     }
 
     @Override

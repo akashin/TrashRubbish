@@ -90,14 +90,27 @@ public class Level implements Json.Serializable {
             if (!isOnField(nextRow, nextColumn)) {
                 break;
             }
-            Array<Unit> cellUnits = findUnits(row, column);
+            Array<Unit> cellUnits = findUnits(nextRow, nextColumn);
+            Direction newDirection = direction;
             for (Unit unit : cellUnits) {
-                if (unit.blocksMovement(direction)) {
-                    break;
+                Direction interactDirection = unit.interact(ball, direction, events);
+                if (interactDirection == Direction.NONE) {
+                    newDirection = Direction.NONE;
+                } else if (newDirection != Direction.NONE) {
+                    newDirection = interactDirection;
                 }
+            }
+            if (newDirection == Direction.NONE) {
+                break;
             }
             row = nextRow;
             column = nextColumn;
+            if (newDirection != direction) {
+                events.add(new Movement(ball.getId(), ball.getRow(), ball.getColumn(), row, column));
+                direction = newDirection;
+                ball.setRow(row);
+                ball.setColumn(column);
+            }
         }
 
         events.add(new Movement(ball.getId(), ball.getRow(), ball.getColumn(), row, column));

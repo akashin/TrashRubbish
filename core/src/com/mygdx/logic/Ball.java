@@ -1,5 +1,8 @@
 package com.mygdx.logic;
 
+import com.badlogic.gdx.utils.Array;
+import com.mygdx.logic.event.Event;
+
 public class Ball extends ColoredUnit {
     protected Ball() {}
 
@@ -8,8 +11,8 @@ public class Ball extends ColoredUnit {
     }
 
     @Override
-    public boolean blocksMovement(Direction direction) {
-        return true;
+    public Direction interact(Ball ball, Direction direction, Array<Event> events) {
+        return Direction.NONE;
     }
 
     @Override

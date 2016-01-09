@@ -1,5 +1,8 @@
 package com.mygdx.logic;
 
+import com.badlogic.gdx.utils.Array;
+import com.mygdx.logic.event.Event;
+
 public abstract class Unit {
     private int row;
     private int column;
@@ -36,7 +39,7 @@ public abstract class Unit {
         this.id = id;
     }
 
-    public abstract boolean blocksMovement(Direction direction);
+    public abstract Direction interact(Ball ball, Direction direction, Array<Event> events);
 
     public abstract char getLetter();
 }
