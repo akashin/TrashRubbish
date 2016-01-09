@@ -61,12 +61,12 @@ public class GameScreen extends BasicScreen {
 
         actionQueue = new Queue<>();
         actors = new HashMap<>();
-        level = Level.createDefaultLevel();
-//        FileHandle handle = Gdx.files.internal("levels/1.json");
+
+        // Load level from file.
         Json json = new Json();
-//        level = json.fromJson(Level.class, handle);
-        String jsonRepr = json.toJson(level);
-        System.err.println(jsonRepr);
+        json.setUsePrototypes(false);
+        level = json.fromJson(Level.class, Gdx.files.internal("levels/1.json"));
+
         System.err.println(level.toString());
 
         LevelBackground levelBackground = new LevelBackground(

@@ -3,7 +3,7 @@ package com.mygdx.logic;
 public abstract class Unit {
     private int row;
     private int column;
-    private int id;
+    private transient int id;
 
     protected Unit() {}
 

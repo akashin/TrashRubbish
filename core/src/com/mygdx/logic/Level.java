@@ -131,27 +131,21 @@ public class Level implements Json.Serializable {
 
         json.writeArrayStart("units");
         for (Unit unit : units) {
-            json.writeValue(unit);
+            json.writeObjectStart(unit.getClass(), Unit.class);
+            json.writeFields(unit);
+            json.writeObjectEnd();
         }
         json.writeArrayEnd();
     }
 
     @Override
     public void read(Json json, JsonValue jsonData) {
-//        rows = jsonData.getInt("rows");
-//        columns = jsonData.getInt("columns");
-//        Array<Pedestal> jsonPedestals = json.readValue("pedestals", Array.class, Pedestal.class, jsonData);
-//        for (Pedestal pedestal : jsonPedestals) {
-//            addPedestal(pedestal);
-//        }
-//        Array<WallActor> jsonWalls = json.readValue("walls", Array.class, WallActor.class, jsonData);
-//        for (WallActor wall : jsonWalls) {
-//            addWall(wall);
-//        }
-//        Array<Ball> jsonBalls = json.readValue("balls", Array.class, Ball.class, jsonData);
-//        for (Ball ball : jsonBalls) {
-//            addBall(ball);
-//        }
+        rows = jsonData.getInt("rows");
+        columns = jsonData.getInt("columns");
+        Array<Unit> jsonUnits = json.readValue("units", Array.class, Unit.class, jsonData);
+        for (Unit unit : jsonUnits) {
+            addUnit(unit);
+        }
     }
 
     public int getRows() {
