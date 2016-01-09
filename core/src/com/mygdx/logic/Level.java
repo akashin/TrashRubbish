@@ -113,9 +113,11 @@ public class Level implements Json.Serializable {
             }
         }
 
-        events.add(new Movement(ball.getId(), ball.getRow(), ball.getColumn(), row, column));
-        ball.setRow(row);
-        ball.setColumn(column);
+        if (ball.getRow() != row || ball.getColumn() != column) {
+            events.add(new Movement(ball.getId(), ball.getRow(), ball.getColumn(), row, column));
+            ball.setRow(row);
+            ball.setColumn(column);
+        }
 
         if (isCompleted()) {
             events.add(new LevelCompleted());
