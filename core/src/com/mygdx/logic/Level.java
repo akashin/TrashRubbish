@@ -5,6 +5,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.StringBuilder;
+import com.mygdx.logic.event.Event;
+import com.mygdx.logic.event.LevelCompleted;
+import com.mygdx.logic.event.Movement;
 
 import java.util.Arrays;
 
@@ -48,8 +51,31 @@ public class Level implements Json.Serializable {
     }
 
     public boolean isOccupied(int row, int column) {
-        Unit unit = findUnit(row, column);
-        return unit != null && unit.blocksMovement();
+        Array<Unit> cellUnits = findUnits(row, column);
+        for (Unit unit : cellUnits) {
+            if (unit.blocksMovement()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isCompleted() {
+        for (Ball ball : getBalls()) {
+            Array<Unit> cellUnits = findUnits(ball.getRow(), ball.getColumn());
+            boolean isOnPedestal = false;
+            for (Unit unit : cellUnits) {
+                if (unit instanceof Pedestal) {
+                    if (((Pedestal) unit).getUnitColor() == ball.getUnitColor()) {
+                        isOnPedestal = true;
+                    }
+                }
+            }
+            if (!isOnPedestal) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public Array<Event> move(int id, Direction direction) {
@@ -81,16 +107,22 @@ public class Level implements Json.Serializable {
         events.add(new Movement(ball.getId(), ball.getRow(), ball.getColumn(), row, column));
         ball.setRow(row);
         ball.setColumn(column);
+
+        if (isCompleted()) {
+            events.add(new LevelCompleted());
+        }
+
         return events;
     }
 
-    public Unit findUnit(int row, int column) {
+    public Array<Unit> findUnits(int row, int column) {
+        Array<Unit> cellUnits = new Array<>();
         for (Unit unit : units) {
             if (unit.getRow() == row && unit.getColumn() == column) {
-                return unit;
+                cellUnits.add(unit);
             }
         }
-        return null;
+        return cellUnits;
     }
 
     @Override

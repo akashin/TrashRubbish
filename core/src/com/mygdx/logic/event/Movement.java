@@ -1,4 +1,4 @@
-package com.mygdx.logic;
+package com.mygdx.logic.event;
 
 public class Movement implements Event {
     public final int objectId;

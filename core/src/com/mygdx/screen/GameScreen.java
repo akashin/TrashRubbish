@@ -17,6 +17,9 @@ import com.mygdx.actor.action.BasicAction;
 import com.mygdx.actor.action.MovementAction;
 import com.mygdx.game.TrashRubbishGame;
 import com.mygdx.logic.*;
+import com.mygdx.logic.event.Event;
+import com.mygdx.logic.event.LevelCompleted;
+import com.mygdx.logic.event.Movement;
 
 import java.util.HashMap;
 
@@ -116,6 +119,11 @@ public class GameScreen extends BasicScreen {
                                         dst.y,
                                         actors.get(movement.objectId)
                                 ));
+                            }
+
+                            if (levelEvent instanceof LevelCompleted) {
+                                // TODO: Show some text here or change screen to show achievements.
+                                Gdx.app.log("ballActor.fling", "Level completed!");
                             }
                         }
                     }
