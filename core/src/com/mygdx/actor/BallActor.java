@@ -4,24 +4,35 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.logic.Ball;
+import com.mygdx.util.Constants;
+import com.mygdx.util.GameColors;
 
-public class BallActor extends Actor {
-    private Ball ball;
+public class BallActor extends UnitActor<Ball> {
+    private static final float SIZE = Constants.CELL_SIZE * 0.7f;
+    private static final float SIZE_WITH_BORDER = Constants.CELL_SIZE * 0.8f;
+
     private Sprite sprite;
 
     public BallActor(Ball ball, AssetManager assetManager) {
-        this.ball = ball;
-        sprite = new Sprite(assetManager.get("boulder.png", Texture.class));
-        sprite.setColor(ball.getUnitColor().color);
-        sprite.setSize(64, 64);
-        setSize(sprite.getWidth(), sprite.getHeight());
+        super(ball, assetManager);
+        sprite = new Sprite(assetManager.get("empty.png", Texture.class));
+        setSize(Constants.CELL_SIZE, Constants.CELL_SIZE);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        sprite.setPosition(getX(), getY());
+        sprite.setColor(GameColors.BORDER);
+        sprite.setSize(SIZE_WITH_BORDER, SIZE_WITH_BORDER);
+        sprite.setPosition(
+                getX() + (getWidth() - SIZE_WITH_BORDER) / 2,
+                getY() + (getHeight() - SIZE_WITH_BORDER) / 2
+        );
+        sprite.draw(batch, parentAlpha);
+
+        sprite.setColor(unit.getUnitColor().color);
+        sprite.setSize(SIZE, SIZE);
+        sprite.setPosition(getX() + (getWidth() - SIZE) / 2, getY() + (getHeight() - SIZE) / 2);
         sprite.draw(batch, parentAlpha);
     }
 }

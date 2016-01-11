@@ -4,18 +4,19 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.logic.Wall;
+import com.mygdx.util.Constants;
+import com.mygdx.util.GameColors;
 
-public class WallActor extends Actor {
-    private Wall wall;
+public class WallActor extends UnitActor<Wall> {
     private Sprite sprite;
 
     public WallActor(Wall wall, AssetManager assetManager) {
-        this.wall = wall;
-        sprite = new Sprite(assetManager.get("wall.png", Texture.class));
-        sprite.setSize(64, 64);
-        setSize(sprite.getWidth(), sprite.getHeight());
+        super(wall, assetManager);
+        sprite = new Sprite(assetManager.get("empty.png", Texture.class));
+        sprite.setColor(GameColors.WALL);
+        sprite.setSize(Constants.CELL_SIZE, Constants.CELL_SIZE);
+        setSize(Constants.CELL_SIZE, Constants.CELL_SIZE);
     }
 
     @Override

@@ -4,9 +4,9 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.logic.event.Event;
 
 public class Pipe extends Unit {
-    Direction[] directions = new Direction[2];
+    private Direction[] directions = new Direction[2];
 
-    protected Pipe() { }
+    protected Pipe() {}
 
     public Pipe(int row, int column, Direction firstDirection, Direction secondDirection) {
         super(row, column);
@@ -27,5 +27,9 @@ public class Pipe extends Unit {
     @Override
     public char getLetter() {
         return '=';
+    }
+
+    public Direction[] getDirections() {
+        return directions;
     }
 }

@@ -4,24 +4,25 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.logic.Pedestal;
+import com.mygdx.util.Constants;
 
-public class PedestalActor extends Actor {
-    private Pedestal pedestal;
+public class PedestalActor extends UnitActor<Pedestal> {
+    private static final float SIZE = Constants.CELL_SIZE * 0.9f;
+
     private Sprite sprite;
 
     public PedestalActor(Pedestal pedestal, AssetManager assetManager) {
-        this.pedestal = pedestal;
-        sprite = new Sprite(assetManager.get("pedestal.png", Texture.class));
+        super(pedestal, assetManager);
+        sprite = new Sprite(assetManager.get("empty.png", Texture.class));
         sprite.setColor(pedestal.getUnitColor().color);
-        sprite.setSize(64, 64);
-        setSize(sprite.getWidth(), sprite.getHeight());
+        setSize(Constants.CELL_SIZE, Constants.CELL_SIZE);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        sprite.setPosition(getX(), getY());
+        sprite.setSize(SIZE, SIZE);
+        sprite.setPosition(getX() + (getWidth() - SIZE) / 2, getY() + (getHeight() - SIZE) / 2);
         sprite.draw(batch, parentAlpha);
     }
 }

@@ -9,10 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Queue;
-import com.mygdx.actor.BallActor;
-import com.mygdx.actor.LevelBackground;
-import com.mygdx.actor.PedestalActor;
-import com.mygdx.actor.WallActor;
+import com.mygdx.actor.*;
 import com.mygdx.actor.action.BasicAction;
 import com.mygdx.actor.action.MovementAction;
 import com.mygdx.game.TrashRubbishGame;
@@ -30,8 +27,9 @@ public class GameScreen extends BasicScreen {
 
     private HashMap<Integer, Actor> actors;
     private Group levelGroup;
-    private Group background;
-    private Group foreground;
+    private Group floor;
+    private Group middle;
+    private Group ceil;
 
     private static final int MAX_CELLS = 6;
     private static final float LEVEL_SIZE = 0.9f;
@@ -71,7 +69,8 @@ public class GameScreen extends BasicScreen {
         // Load level from file.
         Json json = new Json();
         json.setUsePrototypes(false);
-        level = json.fromJson(Level.class, Gdx.files.internal("levels/1.json"));
+//        level = json.fromJson(Level.class, Gdx.files.internal("levels/1.json"));
+        level = Level.createDefaultLevel();
 
         System.err.println(level.toString());
 
@@ -91,11 +90,14 @@ public class GameScreen extends BasicScreen {
                 level.getRows() * Constants.CELL_SIZE
         );
 
-        background = new Group();
-        levelGroup.addActor(background);
+        floor = new Group();
+        levelGroup.addActor(floor);
 
-        foreground = new Group();
-        levelGroup.addActor(foreground);
+        middle = new Group();
+        levelGroup.addActor(middle);
+
+        ceil = new Group();
+        levelGroup.addActor(ceil);
 
         stage.addActor(levelGroup);
 
@@ -142,13 +144,16 @@ public class GameScreen extends BasicScreen {
                         }
                     }
                 });
-                foreground.addActor(actor);
+                middle.addActor(actor);
             } else if (unit instanceof Wall) {
                 actor = new WallActor((Wall)unit, game.getAssetManager());
-                foreground.addActor(actor);
+                middle.addActor(actor);
             } else if (unit instanceof Pedestal) {
                 actor = new PedestalActor((Pedestal)unit, game.getAssetManager());
-                background.addActor(actor);
+                floor.addActor(actor);
+            } else if (unit instanceof Pipe) {
+                actor = new PipeActor((Pipe)unit, game.getAssetManager());
+                floor.addActor(actor);
             }
             if (actor != null) {
                 Vector2 position = cellToVector(unit.getRow(), unit.getColumn());

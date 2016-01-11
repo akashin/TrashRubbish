@@ -155,8 +155,7 @@ public class Level implements Json.Serializable {
         return builder.toString();
     }
 
-    public static Level createDefaultLevel()
-    {
+    public static Level createDefaultLevel() {
         Level level = new Level(4, 4);
         level.addUnit(new Ball(0, 2, UnitColor.BLUE));
         level.addUnit(new Ball(3, 1, UnitColor.RED));
@@ -164,6 +163,8 @@ public class Level implements Json.Serializable {
         level.addUnit(new Pedestal(3, 2, UnitColor.RED));
         level.addUnit(new Wall(0, 3));
         level.addUnit(new Wall(3, 0));
+        level.addUnit(new Pipe(2, 3, Direction.LEFT, Direction.DOWN));
+        level.addUnit(new Pipe(1, 3, Direction.LEFT, Direction.DOWN));
         return level;
     }
 
