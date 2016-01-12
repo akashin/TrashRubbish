@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 public class GameColors {
     public static final Color SCREEN_BACKGROUND = Color.valueOf("FFD7A3");
     public static final Color BACKGROUND = Color.valueOf("FFDFB5");
-    public static final Color PIPE = Color.valueOf("C18A42");
+    public static final Color ARROW = Color.valueOf("C18A42");
     public static final Color BORDER = Color.valueOf("F7BA6B");
     public static final Color LINES = Color.valueOf("EE9944");
     public static final Color WALL = Color.valueOf("F1B66A");

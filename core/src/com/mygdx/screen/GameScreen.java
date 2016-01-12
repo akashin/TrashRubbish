@@ -155,8 +155,8 @@ public class GameScreen extends BasicScreen {
             } else if (unit instanceof Pedestal) {
                 actor = new PedestalActor((Pedestal)unit, game.getAssetManager());
                 floor.addActor(actor);
-            } else if (unit instanceof Pipe) {
-                actor = new PipeActor((Pipe)unit, game.getAssetManager());
+            } else if (unit instanceof Arrow) {
+                actor = new ArrowActor((Arrow)unit, game.getAssetManager());
                 floor.addActor(actor);
             }
             if (actor != null) {
