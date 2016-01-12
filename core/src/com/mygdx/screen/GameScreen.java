@@ -108,6 +108,10 @@ public class GameScreen extends BasicScreen {
                 actor.addListener(new ActorGestureListener() {
                     @Override
                     public void fling(InputEvent event, float velocityX, float velocityY, int button) {
+                        if (actionQueue.size != 0) {
+                            return;
+                        }
+
                         float maxAbsDelta = Math.max(Math.abs(velocityX), Math.abs(velocityY));
                         if (maxAbsDelta < 10) {
                             return;

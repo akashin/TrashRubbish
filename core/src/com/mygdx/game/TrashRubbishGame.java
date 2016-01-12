@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.kotcrab.vis.ui.VisUI;
-import com.mygdx.screen.MainMenuScreen;
+import com.mygdx.screen.GameScreen;
 
 public class TrashRubbishGame extends Game {
 	private AssetManager assetManager;
@@ -21,7 +21,7 @@ public class TrashRubbishGame extends Game {
 
         VisUI.load();
 
-        setScreen(new MainMenuScreen(this));
+        setScreen(new GameScreen(this));
 	}
 
     public AssetManager getAssetManager() {

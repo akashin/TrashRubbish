@@ -1,11 +1,13 @@
 package com.mygdx.screen;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.TrashRubbishGame;
 import com.mygdx.util.Accumulator;
+import com.mygdx.util.GameColors;
 
 public abstract class BasicScreen extends InputAdapter implements Screen {
     public static final float TIME_STEP = 1.0f / 60;
@@ -44,7 +46,8 @@ public abstract class BasicScreen extends InputAdapter implements Screen {
             updateScreen(accumulator.getBound());
         }
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Color color = GameColors.SCREEN_BACKGROUND;
+        Gdx.gl.glClearColor(color.r, color.g, color.b, color.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         renderScreen();

@@ -9,8 +9,8 @@ import com.mygdx.util.Constants;
 import com.mygdx.util.GameColors;
 
 public class BallActor extends UnitActor<Ball> {
-    private static final float SIZE = Constants.CELL_SIZE * 0.7f;
-    private static final float SIZE_WITH_BORDER = Constants.CELL_SIZE * 0.8f;
+    private static final float SIZE = Constants.CELL_SIZE * 0.75f;
+    private static final float SIZE_WITH_BORDER = Constants.CELL_SIZE * 0.85f;
 
     private Sprite sprite;
 
