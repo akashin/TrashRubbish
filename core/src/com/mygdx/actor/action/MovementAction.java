@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.util.Constants;
 
 public class MovementAction extends TimedAction {
-    static final float speed = Constants.CELL_SIZE * 3;
+    static final float speed = Constants.CELL_SIZE * 5;
 
     private Actor actor;
     private float srcX, srcY;
