@@ -1,0 +1,53 @@
+{
+    "title": "Simple Level",
+    "rows": 4,
+    "columns": 4,
+    "units": [
+        {
+            "class": "com.mygdx.logic.Ball",
+            "row": 0,
+            "column": 2,
+            "unitColor": "BLUE"
+        },
+        {
+            "class": "com.mygdx.logic.Ball",
+            "row": 3,
+            "column": 1,
+            "unitColor": "GREEN"
+        },
+        {
+            "class": "com.mygdx.logic.Pedestal",
+            "row": 0,
+            "column": 1,
+            "unitColor": "BLUE"
+        },
+        {
+            "class": "com.mygdx.logic.Pedestal",
+            "row": 3,
+            "column": 2,
+            "unitColor": "GREEN"
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 0,
+            "column": 3
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 3,
+            "column": 0
+        },
+        {
+            "class": "com.mygdx.logic.Arrow",
+            "row": 2,
+            "column": 3,
+            "direction": "LEFT"
+        },
+        {
+            "class": "com.mygdx.logic.Arrow",
+            "row": 1,
+            "column": 3,
+            "direction": "DOWN"
+        }
+    ]
+}

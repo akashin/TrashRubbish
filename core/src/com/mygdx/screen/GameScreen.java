@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.Queue;
 import com.mygdx.actor.*;
 import com.mygdx.actor.action.BasicAction;
@@ -22,6 +23,9 @@ import com.mygdx.util.Constants;
 import java.util.HashMap;
 
 public class GameScreen extends BasicScreen {
+    public static final int MAX_CELLS = 6;
+    public static final float LEVEL_SIZE = 0.9f;
+
     private Level level;
     private Queue<BasicAction> actionQueue;
 
@@ -31,12 +35,13 @@ public class GameScreen extends BasicScreen {
     private Group middle;
     private Group ceil;
 
-    private static final int MAX_CELLS = 6;
-    private static final float LEVEL_SIZE = 0.9f;
-    private float scale;
+    private final String packageDirectory;
+    private final String levelFile;
 
-    public GameScreen(TrashRubbishGame game) {
+    public GameScreen(TrashRubbishGame game, String packageDirectory, String levelFile) {
         super(game);
+        this.packageDirectory = packageDirectory;
+        this.levelFile = levelFile;
     }
 
     class Cell {
@@ -67,16 +72,12 @@ public class GameScreen extends BasicScreen {
         actors = new HashMap<>();
 
         // Load level from file.
-        Json json = new Json();
+        Json json = new Json(JsonWriter.OutputType.json);
         json.setUsePrototypes(false);
-//        level = json.fromJson(Level.class, Gdx.files.internal("levels/1.json"));
-        level = Level.createDefaultLevel();
-
-        System.err.println(level.toString());
+        level = json.fromJson(Level.class, Gdx.files.internal("packages/" + packageDirectory + "/" + levelFile));
 
         levelGroup = new Group();
-        updateScale(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        levelGroup.setScale(scale);
+        levelGroup.setScale(game.getScale());
 
         LevelBackground levelBackground = new LevelBackground(
                 level.getRows(),
@@ -194,16 +195,10 @@ public class GameScreen extends BasicScreen {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        updateScale(width, height);
-        levelGroup.setScale(scale);
+        levelGroup.setScale(game.getScale());
         levelGroup.setPosition(
-                (width - levelGroup.getWidth() * scale) / 2,
-                (height - levelGroup.getHeight() * scale) / 2
+                (width - levelGroup.getWidth() * game.getScale()) / 2,
+                (height - levelGroup.getHeight() * game.getScale()) / 2
         );
-    }
-
-    private void updateScale(int width, int height) {
-        float size = Math.min(width, height);
-        scale = ((size * LEVEL_SIZE) / MAX_CELLS) / Constants.CELL_SIZE;
     }
 }

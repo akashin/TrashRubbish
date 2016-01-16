@@ -5,7 +5,8 @@ import com.mygdx.util.GameColors;
 
 public enum UnitColor {
     RED(GameColors.RED),
-    BLUE(GameColors.BLUE);
+    BLUE(GameColors.BLUE),
+    GREEN(GameColors.GREEN);
 
     public final Color color;
 
