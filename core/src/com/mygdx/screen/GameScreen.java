@@ -197,6 +197,9 @@ public class GameScreen extends BasicScreen {
             }
             actors.put(unit.getId(), actor);
         }
+
+        Array<Event> startingEvents = level.getStartingEvents();
+        // TODO Do something with me!
     }
 
     @Override

@@ -46,6 +46,20 @@ public class Level implements Json.Serializable {
         return balls;
     }
 
+    public Array<Event> getStartingEvents() {
+        Array<Event> events = new Array<>();
+        for (Ball ball : getBalls()) {
+            Array<Unit> cellUnits = findUnits(ball.getRow(), ball.getColumn());
+            for (Unit unit : cellUnits) {
+                Interaction interaction = unit.interactOnEnter(ball, Direction.NONE);
+                if (interaction.events != null) {
+                    events.addAll(interaction.events);
+                }
+            }
+        }
+        return events;
+    }
+
     public boolean isOnField(int row, int column) {
         return (row >= 0 && column >= 0) && (row < rows && column < columns);
     }
