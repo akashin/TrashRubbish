@@ -1,8 +1,5 @@
 package com.mygdx.logic;
 
-import com.badlogic.gdx.utils.Array;
-import com.mygdx.logic.event.Event;
-
 public class Wall extends Unit {
     protected Wall() {}
 
@@ -11,8 +8,8 @@ public class Wall extends Unit {
     }
 
     @Override
-    public Direction interact(Ball ball, Direction direction, Array<Event> events) {
-        return Direction.NONE;
+    public Interaction interact(Ball ball, Direction direction) {
+        return new Interaction(Direction.NONE, null);
     }
 
     @Override

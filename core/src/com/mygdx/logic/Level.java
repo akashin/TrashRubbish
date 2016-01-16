@@ -91,13 +91,17 @@ public class Level implements Json.Serializable {
                 break;
             }
             Array<Unit> cellUnits = findUnits(nextRow, nextColumn);
+            Array<Event> newEvents = new Array<>();
             Direction newDirection = direction;
             for (Unit unit : cellUnits) {
-                Direction interactDirection = unit.interact(ball, direction, events);
-                if (interactDirection == Direction.NONE) {
+                Interaction interaction = unit.interact(ball, direction);
+                if (interaction.events != null) {
+                    newEvents.addAll(interaction.events);
+                }
+                if (interaction.direction == Direction.NONE) {
                     newDirection = Direction.NONE;
                 } else if (newDirection != Direction.NONE) {
-                    newDirection = interactDirection;
+                    newDirection = interaction.direction;
                 }
             }
             if (newDirection == Direction.NONE) {
@@ -105,12 +109,13 @@ public class Level implements Json.Serializable {
             }
             row = nextRow;
             column = nextColumn;
-            if (newDirection != direction) {
+            if (newDirection != direction || events.size > 0) {
                 events.add(new Movement(ball.getId(), ball.getRow(), ball.getColumn(), row, column));
                 direction = newDirection;
                 ball.setRow(row);
                 ball.setColumn(column);
             }
+            events.addAll(newEvents);
         }
 
         if (ball.getRow() != row || ball.getColumn() != column) {

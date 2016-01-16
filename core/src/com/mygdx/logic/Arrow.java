@@ -1,8 +1,5 @@
 package com.mygdx.logic;
 
-import com.badlogic.gdx.utils.Array;
-import com.mygdx.logic.event.Event;
-
 public class Arrow extends Unit {
     private Direction direction;
 
@@ -14,8 +11,8 @@ public class Arrow extends Unit {
     }
 
     @Override
-    public Direction interact(Ball ball, Direction direction, Array<Event> events) {
-        return this.direction;
+    public Interaction interact(Ball ball, Direction direction) {
+        return new Interaction(this.direction, null);
     }
 
     @Override
