@@ -9,6 +9,7 @@ public class GameColors {
     public static final Color BORDER = Color.valueOf("F7BA6B");
     public static final Color LINES = Color.valueOf("EE9944");
     public static final Color WALL = Color.valueOf("F1B66A");
+    public static final Color LEVEL_COMPLETED = Color.valueOf("FF9909");
 
     public static final Color RED = Color.valueOf("FF533C");
     public static final Color BLUE = Color.valueOf("4632D8");

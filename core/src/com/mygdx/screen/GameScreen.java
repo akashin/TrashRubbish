@@ -12,12 +12,11 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.Queue;
 import com.mygdx.actor.*;
 import com.mygdx.actor.action.BasicAction;
+import com.mygdx.actor.action.InstantAction;
 import com.mygdx.actor.action.MovementAction;
 import com.mygdx.game.TrashRubbishGame;
 import com.mygdx.logic.*;
-import com.mygdx.logic.event.Event;
-import com.mygdx.logic.event.LevelCompleted;
-import com.mygdx.logic.event.Movement;
+import com.mygdx.logic.event.*;
 import com.mygdx.util.Constants;
 
 import java.util.HashMap;
@@ -28,6 +27,7 @@ public class GameScreen extends BasicScreen {
 
     private Level level;
     private Queue<BasicAction> actionQueue;
+    private boolean levelCompleted = false;
 
     private HashMap<Integer, Actor> actors;
     private Group levelGroup;
@@ -36,12 +36,14 @@ public class GameScreen extends BasicScreen {
     private Group ceil;
 
     private final String packageDirectory;
+    private final int levelIndex;
     private final String levelFile;
 
-    public GameScreen(TrashRubbishGame game, String packageDirectory, String levelFile) {
+    public GameScreen(TrashRubbishGame game, String packageDirectory, int levelIndex) {
         super(game);
         this.packageDirectory = packageDirectory;
-        this.levelFile = levelFile;
+        this.levelIndex = levelIndex;
+        this.levelFile = game.getPackage("default").get(levelIndex);
     }
 
     class Cell {
@@ -79,7 +81,7 @@ public class GameScreen extends BasicScreen {
         levelGroup = new Group();
         levelGroup.setScale(game.getScale());
 
-        LevelBackground levelBackground = new LevelBackground(
+        final LevelBackground levelBackground = new LevelBackground(
                 level.getRows(),
                 level.getColumns(),
                 game.getAssetManager()
@@ -109,7 +111,7 @@ public class GameScreen extends BasicScreen {
                 actor.addListener(new ActorGestureListener() {
                     @Override
                     public void fling(InputEvent event, float velocityX, float velocityY, int button) {
-                        if (actionQueue.size != 0) {
+                        if (actionQueue.size != 0 || levelCompleted) {
                             return;
                         }
 
@@ -129,6 +131,7 @@ public class GameScreen extends BasicScreen {
                         System.err.println(level.toString());
                         Gdx.app.log("ballActor.fling", "Got " + events.size + " events");
                         for (Event levelEvent : events) {
+                            Gdx.app.log("Event class", levelEvent.getClass().getSimpleName());
                             if (levelEvent instanceof Movement) {
                                 Movement movement = (Movement) levelEvent;
                                 Vector2 src = cellToVector(movement.srcRow, movement.srcColumn);
@@ -143,8 +146,36 @@ public class GameScreen extends BasicScreen {
                             }
 
                             if (levelEvent instanceof LevelCompleted) {
-                                // TODO: Show some text here or change screen to show achievements.
+                                levelCompleted = true;
+                                actionQueue.addLast(new InstantAction() {
+                                    @Override
+                                    public void act() {
+                                        levelBackground.setCompleted(true);
+                                    }
+                                });
                                 Gdx.app.log("ballActor.fling", "Level completed!");
+                            }
+
+                            if (levelEvent instanceof BallEntersPedestal) {
+                                BallEntersPedestal entersPedestal = (BallEntersPedestal) levelEvent;
+                                final BallActor ballActor = (BallActor) actors.get(entersPedestal.objectId);
+                                actionQueue.addLast(new InstantAction() {
+                                    @Override
+                                    public void act() {
+                                        ballActor.setPlaced(true);
+                                    }
+                                });
+                            }
+
+                            if (levelEvent instanceof BallLeavesPedestal) {
+                                BallLeavesPedestal leavesPedestal = (BallLeavesPedestal) levelEvent;
+                                final BallActor ballActor = (BallActor) actors.get(leavesPedestal.objectId);
+                                actionQueue.addLast(new InstantAction() {
+                                    @Override
+                                    public void act() {
+                                        ballActor.setPlaced(false);
+                                    }
+                                });
                             }
                         }
                     }
@@ -200,5 +231,13 @@ public class GameScreen extends BasicScreen {
                 (width - levelGroup.getWidth() * game.getScale()) / 2,
                 (height - levelGroup.getHeight() * game.getScale()) / 2
         );
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (levelCompleted && levelIndex + 1 < game.getPackage(packageDirectory).size) {
+            game.setScreen(new GameScreen(game, packageDirectory, levelIndex + 1));
+        }
+        return super.touchDown(screenX, screenY, pointer, button);
     }
 }

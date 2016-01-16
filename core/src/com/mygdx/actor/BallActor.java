@@ -9,10 +9,11 @@ import com.mygdx.util.Constants;
 import com.mygdx.util.GameColors;
 
 public class BallActor extends UnitActor<Ball> {
-    private static final float SIZE = Constants.CELL_SIZE * 0.75f;
-    private static final float SIZE_WITH_BORDER = Constants.CELL_SIZE * 0.85f;
+    private static final float SIZE = Constants.CELL_SIZE * 0.7f;
+    private static final float SIZE_WITH_BORDER = Constants.CELL_SIZE * 0.8f;
 
     private Sprite sprite;
+    private boolean placed = false;
 
     public BallActor(Ball ball, AssetManager assetManager) {
         super(ball, assetManager);
@@ -22,7 +23,11 @@ public class BallActor extends UnitActor<Ball> {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        sprite.setColor(GameColors.BORDER);
+        if (placed) {
+            sprite.setColor(GameColors.LEVEL_COMPLETED);
+        } else {
+            sprite.setColor(GameColors.BORDER);
+        }
         sprite.setSize(SIZE_WITH_BORDER, SIZE_WITH_BORDER);
         sprite.setPosition(
                 getX() + (getWidth() - SIZE_WITH_BORDER) / 2,
@@ -34,5 +39,9 @@ public class BallActor extends UnitActor<Ball> {
         sprite.setSize(SIZE, SIZE);
         sprite.setPosition(getX() + (getWidth() - SIZE) / 2, getY() + (getHeight() - SIZE) / 2);
         sprite.draw(batch, parentAlpha);
+    }
+
+    public void setPlaced(boolean placed) {
+        this.placed = placed;
     }
 }

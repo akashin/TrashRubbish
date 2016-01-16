@@ -51,18 +51,17 @@ public class TrashRubbishGame extends Game {
         assetManager.load("empty.png", Texture.class);
         assetManager.finishLoading();
 
+        skin = new Skin();
+
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("teen.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = (int) (scale * 30);
         BitmapFont menuFont = generator.generateFont(parameter);
-
-        skin = new Skin();
-        skin.add("menu-font", menuFont);
+        skin.add("menu", menuFont);
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = menuFont;
         textButtonStyle.fontColor = GameColors.LINES;
-
         skin.add("default", textButtonStyle);
 
         setScreen(new MainMenuScreen(this));

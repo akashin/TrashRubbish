@@ -15,6 +15,8 @@ public class LevelBackground extends Actor {
     private final int columns;
     private final Sprite floor;
 
+    private boolean levelCompleted = false;
+
     public LevelBackground(int rows, int columns, AssetManager assetManager) {
         this.rows = rows;
         this.columns = columns;
@@ -28,12 +30,20 @@ public class LevelBackground extends Actor {
                 Constants.CELL_SIZE * rows + BORDER_SIZE * 2
         );
         floor.setPosition(getX() - BORDER_SIZE, getY() - BORDER_SIZE);
-        floor.setColor(GameColors.BORDER);
+        if (levelCompleted) {
+            floor.setColor(GameColors.LEVEL_COMPLETED);
+        } else {
+            floor.setColor(GameColors.BORDER);
+        }
         floor.draw(batch, parentAlpha);
 
         floor.setSize(Constants.CELL_SIZE * columns, Constants.CELL_SIZE * rows);
         floor.setPosition(getX(), getY());
-        floor.setColor(GameColors.SCREEN_BACKGROUND);
+        if (levelCompleted) {
+            floor.setColor(GameColors.LEVEL_COMPLETED);
+        } else {
+            floor.setColor(GameColors.SCREEN_BACKGROUND);
+        }
         floor.draw(batch, parentAlpha);
 
         for (int row = 0; row < rows; ++row) {
@@ -47,5 +57,9 @@ public class LevelBackground extends Actor {
                 floor.draw(batch, parentAlpha);
             }
         }
+    }
+
+    public void setCompleted(boolean levelCompleted) {
+        this.levelCompleted = levelCompleted;
     }
 }

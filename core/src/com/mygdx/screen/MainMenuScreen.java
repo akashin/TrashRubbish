@@ -44,7 +44,7 @@ public class MainMenuScreen extends BasicScreen {
         startGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, "default", game.getPackage("default").get(0)));
+                game.setScreen(new GameScreen(game, "default", 0));
             }
         });
 
