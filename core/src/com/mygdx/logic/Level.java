@@ -130,7 +130,7 @@ public class Level implements Json.Serializable {
             }
             row = nextRow;
             column = nextColumn;
-            if (newDirection != direction || events.size > 0) {
+            if (newDirection != direction || newEvents.size > 0) {
                 events.add(new Movement(ball.getId(), ball.getRow(), ball.getColumn(), row, column));
                 direction = newDirection;
                 ball.setRow(row);

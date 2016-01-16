@@ -131,7 +131,7 @@ public class GameScreen extends BasicScreen {
                         System.err.println(level.toString());
                         Gdx.app.log("ballActor.fling", "Got " + events.size + " events");
                         for (Event levelEvent : events) {
-                            Gdx.app.log("Event class", levelEvent.getClass().getSimpleName());
+                            Gdx.app.log("ballActor.fling", "Event " + levelEvent.getClass().getSimpleName());
                             if (levelEvent instanceof Movement) {
                                 Movement movement = (Movement) levelEvent;
                                 Vector2 src = cellToVector(movement.srcRow, movement.srcColumn);
