@@ -36,7 +36,9 @@ public abstract class Unit {
         this.id = id;
     }
 
-    public abstract Interaction interact(Ball ball, Direction direction);
+    public abstract Interaction interactOnEnter(Ball ball, Direction direction);
+
+    public abstract Interaction interactOnLeave(Ball ball, Direction direction);
 
     public abstract char getLetter();
 }

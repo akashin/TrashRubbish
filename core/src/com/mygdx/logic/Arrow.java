@@ -11,8 +11,13 @@ public class Arrow extends Unit {
     }
 
     @Override
-    public Interaction interact(Ball ball, Direction direction) {
+    public Interaction interactOnEnter(Ball ball, Direction direction) {
         return new Interaction(this.direction, null);
+    }
+
+    @Override
+    public Interaction interactOnLeave(Ball ball, Direction direction) {
+        return new Interaction(Direction.NONE, null);
     }
 
     @Override

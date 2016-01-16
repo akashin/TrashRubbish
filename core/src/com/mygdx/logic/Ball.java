@@ -8,7 +8,12 @@ public class Ball extends ColoredUnit {
     }
 
     @Override
-    public Interaction interact(Ball ball, Direction direction) {
+    public Interaction interactOnEnter(Ball ball, Direction direction) {
+        return new Interaction(Direction.NONE, null);
+    }
+
+    @Override
+    public Interaction interactOnLeave(Ball ball, Direction direction) {
         return new Interaction(Direction.NONE, null);
     }
 
