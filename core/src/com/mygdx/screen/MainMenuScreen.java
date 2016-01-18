@@ -9,7 +9,7 @@ import com.mygdx.game.TrashRubbishGame;
 
 public class MainMenuScreen extends BasicScreen {
     private Table table;
-    private TextButton startGameButton;
+    private TextButton playButton;
     private TextButton exitButton;
 
     public MainMenuScreen(TrashRubbishGame game) {
@@ -34,17 +34,17 @@ public class MainMenuScreen extends BasicScreen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        startGameButton = new TextButton("Start Game", game.getSkin());
-        table.add(startGameButton).width(100);
+        playButton = new TextButton("Play", game.getSkin());
+        table.add(playButton).width(100);
 
         table.row();
         exitButton = new TextButton("Exit", game.getSkin());
         table.add(exitButton).width(100);
 
-        startGameButton.addListener(new ClickListener() {
+        playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, "default", 0));
+                game.setScreen(new GameScreen(game, "default", game.getLastLevelIndex()));
             }
         });
 

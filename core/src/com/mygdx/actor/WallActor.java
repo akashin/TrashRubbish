@@ -9,7 +9,7 @@ import com.mygdx.util.Constants;
 import com.mygdx.util.GameColors;
 
 public class WallActor extends UnitActor<Wall> {
-    private static final float SIZE = Constants.CELL_SIZE * 0.9f;
+    private static final float SIZE = Constants.CELL_SIZE * 0.95f;
 
     private Sprite sprite;
 

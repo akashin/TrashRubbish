@@ -1,147 +1,147 @@
 {
-  "rows": 5,
-  "columns": 5,
-  "units": [
-    {
-      "class": "com.mygdx.logic.Ball",
-      "row": 2,
-      "column": 4,
-      "unitColor": "GREEN"
-    },
-    {
-      "class": "com.mygdx.logic.Ball",
-      "row": 2,
-      "column": 0,
-      "unitColor": "GREEN"
-    },
-    {
-      "class": "com.mygdx.logic.Ball",
-      "row": 0,
-      "column": 2,
-      "unitColor": "GREEN"
-    },
-    {
-      "class": "com.mygdx.logic.Ball",
-      "row": 1,
-      "column": 2,
-      "unitColor": "GREEN"
-    },
-    {
-      "class": "com.mygdx.logic.Ball",
-      "row": 4,
-      "column": 2,
-      "unitColor": "RED"
-    },
-    {
-      "class": "com.mygdx.logic.Pedestal",
-      "row": 2,
-      "column": 0,
-      "unitColor": "GREEN"
-    },
-    {
-      "class": "com.mygdx.logic.Pedestal",
-      "row": 2,
-      "column": 4,
-      "unitColor": "GREEN"
-    },
-    {
-      "class": "com.mygdx.logic.Pedestal",
-      "row": 4,
-      "column": 2,
-      "unitColor": "GREEN"
-    },
-    {
-      "class": "com.mygdx.logic.Pedestal",
-      "row": 0,
-      "column": 2,
-      "unitColor": "GREEN"
-    },
-    {
-      "class": "com.mygdx.logic.Pedestal",
-      "row": 2,
-      "column": 2,
-      "unitColor": "RED"
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 0,
-      "column": 0
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 0,
-      "column": 1
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 0,
-      "column": 3
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 0,
-      "column": 4
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 1,
-      "column": 0
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 1,
-      "column": 1
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 1,
-      "column": 3
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 1,
-      "column": 4
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 3,
-      "column": 0
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 3,
-      "column": 1
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 3,
-      "column": 3
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 3,
-      "column": 4
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 4,
-      "column": 0
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 4,
-      "column": 1
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 4,
-      "column": 3
-    },
-    {
-      "class": "com.mygdx.logic.Wall",
-      "row": 4,
-      "column": 4
-    },
-    
-  ]
+    "title": "Level 1",
+    "rows": 5,
+    "columns": 5,
+    "units": [
+        {
+            "class": "com.mygdx.logic.Ball",
+            "row": 2,
+            "column": 4,
+            "unitColor": "GREEN"
+        },
+        {
+            "class": "com.mygdx.logic.Ball",
+            "row": 2,
+            "column": 0,
+            "unitColor": "GREEN"
+        },
+        {
+            "class": "com.mygdx.logic.Ball",
+            "row": 0,
+            "column": 2,
+            "unitColor": "GREEN"
+        },
+        {
+            "class": "com.mygdx.logic.Ball",
+            "row": 1,
+            "column": 2,
+            "unitColor": "GREEN"
+        },
+        {
+            "class": "com.mygdx.logic.Ball",
+            "row": 4,
+            "column": 2,
+            "unitColor": "RED"
+        },
+        {
+            "class": "com.mygdx.logic.Pedestal",
+            "row": 2,
+            "column": 0,
+            "unitColor": "GREEN"
+        },
+        {
+            "class": "com.mygdx.logic.Pedestal",
+            "row": 2,
+            "column": 4,
+            "unitColor": "GREEN"
+        },
+        {
+            "class": "com.mygdx.logic.Pedestal",
+            "row": 4,
+            "column": 2,
+            "unitColor": "GREEN"
+        },
+        {
+            "class": "com.mygdx.logic.Pedestal",
+            "row": 0,
+            "column": 2,
+            "unitColor": "GREEN"
+        },
+        {
+            "class": "com.mygdx.logic.Pedestal",
+            "row": 2,
+            "column": 2,
+            "unitColor": "RED"
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 0,
+            "column": 0
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 0,
+            "column": 1
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 0,
+            "column": 3
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 0,
+            "column": 4
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 1,
+            "column": 0
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 1,
+            "column": 1
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 1,
+            "column": 3
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 1,
+            "column": 4
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 3,
+            "column": 0
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 3,
+            "column": 1
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 3,
+            "column": 3
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 3,
+            "column": 4
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 4,
+            "column": 0
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 4,
+            "column": 1
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 4,
+            "column": 3
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 4,
+            "column": 4
+        }
+    ]
 }

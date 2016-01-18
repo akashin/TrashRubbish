@@ -14,6 +14,7 @@ import java.util.Arrays;
 public class Level implements Json.Serializable {
     private int rows;
     private int columns;
+    private String title;
     private int firstFreeObjectId = 1;
 
     private Array<Unit> units = new Array<>();
@@ -21,9 +22,10 @@ public class Level implements Json.Serializable {
     protected Level() {
     }
 
-    public Level(int rows, int columns) {
+    public Level(int rows, int columns, String title) {
         this.rows = rows;
         this.columns = columns;
+        this.title = title;
     }
 
     private int addUnit(Unit unit) {
@@ -182,7 +184,7 @@ public class Level implements Json.Serializable {
     }
 
     public static Level createDefaultLevel() {
-        Level level = new Level(4, 4);
+        Level level = new Level(4, 4, "Default Level");
         level.addUnit(new Ball(0, 2, UnitColor.BLUE));
         level.addUnit(new Ball(3, 1, UnitColor.GREEN));
         level.addUnit(new Pedestal(0, 1, UnitColor.BLUE));
@@ -212,6 +214,7 @@ public class Level implements Json.Serializable {
     public void read(Json json, JsonValue jsonData) {
         rows = jsonData.getInt("rows");
         columns = jsonData.getInt("columns");
+        title = jsonData.getString("title");
         Array<Unit> jsonUnits = json.readValue("units", Array.class, Unit.class, jsonData);
         for (Unit unit : jsonUnits) {
             addUnit(unit);

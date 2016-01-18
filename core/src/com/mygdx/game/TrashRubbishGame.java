@@ -25,6 +25,7 @@ public class TrashRubbishGame extends Game {
     private Skin skin;
     private float scale;
     private HashMap<String, Array<String>> packages = new HashMap<>();
+    private int lastLevelIndex = 0;
 
     @Override
 	public void create() {
@@ -62,6 +63,7 @@ public class TrashRubbishGame extends Game {
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = menuFont;
         textButtonStyle.fontColor = GameColors.LINES;
+        textButtonStyle.disabledFontColor = GameColors.DISABLED;
         skin.add("default", textButtonStyle);
 
         setScreen(new MainMenuScreen(this));
@@ -81,6 +83,14 @@ public class TrashRubbishGame extends Game {
 
     public Array<String> getPackage(String directory) {
         return packages.get(directory);
+    }
+
+    public int getLastLevelIndex() {
+        return lastLevelIndex;
+    }
+
+    public void levelCompleted(int levelIndex) {
+        lastLevelIndex = Math.min(getPackage("default").size - 1, Math.max(lastLevelIndex, levelIndex + 1));
     }
 
     public void updateScale(int width, int height) {

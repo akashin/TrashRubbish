@@ -5,7 +5,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
@@ -34,6 +37,9 @@ public class GameScreen extends BasicScreen {
     private Group floor;
     private Group middle;
     private Group ceil;
+    private Group leftBottom;
+    private Group rightBottom;
+    private Group centerBottom;
 
     private final String packageDirectory;
     private final int levelIndex;
@@ -95,14 +101,72 @@ public class GameScreen extends BasicScreen {
 
         floor = new Group();
         levelGroup.addActor(floor);
-
         middle = new Group();
         levelGroup.addActor(middle);
-
         ceil = new Group();
         levelGroup.addActor(ceil);
-
         stage.addActor(levelGroup);
+
+        leftBottom = new Group();
+        TextButton retryButton = new TextButton("Retry", game.getSkin());
+        leftBottom.addActor(retryButton);
+        stage.addActor(leftBottom);
+
+        retryButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(game, packageDirectory, levelIndex));
+            }
+        });
+
+        rightBottom = new Group();
+        TextButton backButton = new TextButton("Back", game.getSkin());
+        backButton.setPosition(-backButton.getWidth(), 0);
+        rightBottom.addActor(backButton);
+        stage.addActor(rightBottom);
+
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MainMenuScreen(game));
+            }
+        });
+
+        centerBottom = new Group();
+        stage.addActor(centerBottom);
+
+        TextButton levelNumber = new TextButton(String.valueOf(levelIndex + 1), game.getSkin());
+        levelNumber.setPosition(-levelNumber.getWidth() / 2, 0);
+        centerBottom.addActor(levelNumber);
+
+        TextButton previousLevel = new TextButton("<", game.getSkin());
+        previousLevel.setPosition(
+                -(levelNumber.getWidth() / 2) - previousLevel.getWidth() - 10 * game.getScale(),
+                0
+        );
+        if (levelIndex == 0) {
+            previousLevel.setDisabled(true);
+        }
+        previousLevel.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new GameScreen(game, packageDirectory, levelIndex - 1));
+            }
+        });
+        centerBottom.addActor(previousLevel);
+
+        final TextButton nextLevel = new TextButton(">", game.getSkin());
+        nextLevel.setPosition(levelNumber.getWidth() / 2 + 10 * game.getScale(), 0);
+        if (levelIndex == game.getLastLevelIndex()) {
+            nextLevel.setDisabled(true);
+        }
+        nextLevel.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new GameScreen(game, packageDirectory, levelIndex + 1));
+            }
+        });
+        centerBottom.addActor(nextLevel);
 
         for (final Unit unit : level.getUnits()) {
             Actor actor = null;
@@ -147,10 +211,14 @@ public class GameScreen extends BasicScreen {
 
                             if (levelEvent instanceof LevelCompleted) {
                                 levelCompleted = true;
+                                game.levelCompleted(levelIndex);
                                 actionQueue.addLast(new InstantAction() {
                                     @Override
                                     public void act() {
                                         levelBackground.setCompleted(true);
+                                        if (levelIndex != game.getLastLevelIndex()) {
+                                            nextLevel.setDisabled(false);
+                                        }
                                     }
                                 });
                                 Gdx.app.log("ballActor.fling", "Level completed!");
@@ -203,11 +271,6 @@ public class GameScreen extends BasicScreen {
     }
 
     @Override
-    public void dispose() {
-        super.dispose();
-    }
-
-    @Override
     public void renderScreen() {
         stage.draw();
     }
@@ -234,6 +297,9 @@ public class GameScreen extends BasicScreen {
                 (width - levelGroup.getWidth() * game.getScale()) / 2,
                 (height - levelGroup.getHeight() * game.getScale()) / 2
         );
+        leftBottom.setPosition(20 * game.getScale(), 20 * game.getScale());
+        rightBottom.setPosition(width - 20 * game.getScale(), 20 * game.getScale());
+        centerBottom.setPosition(width / 2, 20 * game.getScale());
     }
 
     @Override
