@@ -228,4 +228,8 @@ public class Level implements Json.Serializable {
     public int getColumns() {
         return columns;
     }
+
+    public String getTitle() {
+        return title;
+    }
 }

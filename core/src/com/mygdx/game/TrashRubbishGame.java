@@ -7,6 +7,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
@@ -65,6 +66,11 @@ public class TrashRubbishGame extends Game {
         textButtonStyle.fontColor = GameColors.LINES;
         textButtonStyle.disabledFontColor = GameColors.DISABLED;
         skin.add("default", textButtonStyle);
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = menuFont;
+        labelStyle.fontColor = GameColors.LINES;
+        skin.add("default", labelStyle);
 
         setScreen(new MainMenuScreen(this));
 	}
