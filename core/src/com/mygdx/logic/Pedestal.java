@@ -13,6 +13,11 @@ public class Pedestal extends ColoredUnit {
     }
 
     @Override
+    public boolean canEnter(Ball ball, Direction direction) {
+        return true;
+    }
+
+    @Override
     public Interaction interactOnEnter(Ball ball, Direction direction) {
         Array<Event> events = new Array<>();
         if (ball.getUnitColor() == this.getUnitColor()) {

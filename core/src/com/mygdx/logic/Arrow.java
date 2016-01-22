@@ -11,6 +11,11 @@ public class Arrow extends Unit {
     }
 
     @Override
+    public boolean canEnter(Ball ball, Direction direction) {
+        return true;
+    }
+
+    @Override
     public Interaction interactOnEnter(Ball ball, Direction direction) {
         return new Interaction(this.direction, null);
     }

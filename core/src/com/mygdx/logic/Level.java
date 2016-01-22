@@ -115,21 +115,25 @@ public class Level implements Json.Serializable {
                     newEvents.addAll(interaction.events);
                 }
             }
+            boolean canEnter = true;
+            for (Unit unit : nextCellUnits) {
+                canEnter &= unit.canEnter(ball, direction);
+            }
+            if (!canEnter) {
+                break;
+            }
+
             Direction newDirection = direction;
             for (Unit unit : nextCellUnits) {
                 Interaction interaction = unit.interactOnEnter(ball, direction);
                 if (interaction.events != null) {
                     newEvents.addAll(interaction.events);
                 }
-                if (interaction.direction == Direction.NONE) {
-                    newDirection = Direction.NONE;
-                } else if (newDirection != Direction.NONE) {
+                if (interaction.direction != Direction.NONE) {
                     newDirection = interaction.direction;
                 }
             }
-            if (newDirection == Direction.NONE) {
-                break;
-            }
+
             row = nextRow;
             column = nextColumn;
             if (newDirection != direction || newEvents.size > 0) {

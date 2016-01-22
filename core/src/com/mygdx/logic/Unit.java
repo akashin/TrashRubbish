@@ -36,6 +36,8 @@ public abstract class Unit {
         this.id = id;
     }
 
+    public abstract boolean canEnter(Ball ball, Direction direction);
+
     public abstract Interaction interactOnEnter(Ball ball, Direction direction);
 
     public abstract Interaction interactOnLeave(Ball ball, Direction direction);

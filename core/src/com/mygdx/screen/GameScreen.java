@@ -331,5 +331,11 @@ public class GameScreen extends BasicScreen {
                 }
             });
         }
+
+        if (event instanceof ColorChanged) {
+            ColorChanged colorChanged = (ColorChanged) event;
+            final BallActor ballActor = (BallActor) actors.get(colorChanged.objectId);
+            // TODO: Do something with this event.
+        }
     }
 }

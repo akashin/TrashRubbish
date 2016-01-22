@@ -8,6 +8,11 @@ public class Ball extends ColoredUnit {
     }
 
     @Override
+    public boolean canEnter(Ball ball, Direction direction) {
+        return false;
+    }
+
+    @Override
     public Interaction interactOnEnter(Ball ball, Direction direction) {
         return new Interaction(Direction.NONE, null);
     }

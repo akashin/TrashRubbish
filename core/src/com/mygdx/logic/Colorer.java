@@ -6,6 +6,11 @@ import com.mygdx.logic.event.Event;
 
 public class Colorer extends ColoredUnit {
     @Override
+    public boolean canEnter(Ball ball, Direction direction) {
+        return true;
+    }
+
+    @Override
     public Interaction interactOnEnter(Ball ball, Direction direction) {
         Array<Event> events = new Array<>();
         events.add(new ColorChanged(ball.getId(), ball.getRow(), ball.getColumn(), getUnitColor()));
