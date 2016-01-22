@@ -5,7 +5,7 @@ import com.mygdx.logic.event.BallEntersPedestal;
 import com.mygdx.logic.event.BallLeavesPedestal;
 import com.mygdx.logic.event.Event;
 
-public class Pedestal extends ColoredUnit{
+public class Pedestal extends ColoredUnit {
     protected Pedestal() {}
 
     public Pedestal(int row, int column, UnitColor unitColor) {

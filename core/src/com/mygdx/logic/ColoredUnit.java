@@ -13,4 +13,9 @@ public abstract class ColoredUnit extends Unit {
     public UnitColor getUnitColor() {
         return unitColor;
     }
+
+    public void setUnitColor(UnitColor unitColor) {
+        this.unitColor = unitColor;
+    }
+
 }

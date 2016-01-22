@@ -223,6 +223,9 @@ public class GameScreen extends BasicScreen {
             } else if (unit instanceof Arrow) {
                 actor = new ArrowActor((Arrow)unit, game.getAssetManager());
                 floor.addActor(actor);
+            } else if (unit instanceof Colorer) {
+                actor = new ColorerActor((Colorer)unit, game.getAssetManager());
+                floor.addActor(actor);
             }
             if (actor != null) {
                 Vector2 position = cellToVector(unit.getRow(), unit.getColumn());

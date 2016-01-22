@@ -48,6 +48,18 @@
             "row": 1,
             "column": 3,
             "direction": "DOWN"
+        },
+        {
+            "class": "com.mygdx.logic.Colorer",
+            "row": 1,
+            "column": 0,
+            "unitColor": "GREEN"
+        },
+        {
+            "class": "com.mygdx.logic.Colorer",
+            "row": 2,
+            "column": 0,
+            "unitColor": "BLUE"
         }
     ]
 }
