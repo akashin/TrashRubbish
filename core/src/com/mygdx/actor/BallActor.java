@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.mygdx.logic.Ball;
+import com.mygdx.logic.UnitColor;
 import com.mygdx.util.Constants;
 import com.mygdx.util.GameColors;
 
@@ -14,9 +15,11 @@ public class BallActor extends UnitActor<Ball> {
 
     private Sprite sprite;
     private boolean placed = false;
+    private UnitColor unitColor;
 
     public BallActor(Ball ball, AssetManager assetManager) {
         super(ball, assetManager);
+        unitColor = ball.getUnitColor();
         sprite = new Sprite(assetManager.get("empty.png", Texture.class));
         setSize(Constants.CELL_SIZE, Constants.CELL_SIZE);
     }
@@ -35,7 +38,7 @@ public class BallActor extends UnitActor<Ball> {
         );
         sprite.draw(batch, parentAlpha);
 
-        sprite.setColor(unit.getUnitColor().color);
+        sprite.setColor(this.unitColor.color);
         sprite.setSize(SIZE, SIZE);
         sprite.setPosition(getX() + (getWidth() - SIZE) / 2, getY() + (getHeight() - SIZE) / 2);
         sprite.draw(batch, parentAlpha);
@@ -43,5 +46,9 @@ public class BallActor extends UnitActor<Ball> {
 
     public void setPlaced(boolean placed) {
         this.placed = placed;
+    }
+
+    public void setUnitColor(UnitColor unitColor) {
+        this.unitColor = unitColor;
     }
 }

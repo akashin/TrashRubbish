@@ -333,9 +333,14 @@ public class GameScreen extends BasicScreen {
         }
 
         if (event instanceof ColorChanged) {
-            ColorChanged colorChanged = (ColorChanged) event;
+            final ColorChanged colorChanged = (ColorChanged) event;
             final BallActor ballActor = (BallActor) actors.get(colorChanged.objectId);
-            // TODO: Do something with this event.
+            actionQueue.addLast(new InstantAction() {
+                @Override
+                public void act() {
+                    ballActor.setUnitColor(colorChanged.color);
+                }
+            });
         }
     }
 }
