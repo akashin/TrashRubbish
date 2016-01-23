@@ -1,6 +1,6 @@
 package com.mygdx.logic;
 
-public class Arrow extends Unit {
+public class Arrow extends GridUnit {
     private Direction direction;
 
     protected Arrow() {}

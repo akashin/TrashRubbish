@@ -1,6 +1,6 @@
 package com.mygdx.logic;
 
-public class Wall extends Unit {
+public class Wall extends GridUnit {
     protected Wall() {}
 
     public Wall(int row, int column) {

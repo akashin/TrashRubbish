@@ -1,6 +1,6 @@
 package com.mygdx.logic;
 
-public abstract class ColoredUnit extends Unit {
+public abstract class ColoredUnit extends GridUnit {
     private UnitColor unitColor;
 
     protected ColoredUnit() {}

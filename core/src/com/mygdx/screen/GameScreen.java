@@ -226,10 +226,22 @@ public class GameScreen extends BasicScreen {
             } else if (unit instanceof Colorer) {
                 actor = new ColorerActor((Colorer)unit, game.getAssetManager());
                 floor.addActor(actor);
+            } else if (unit instanceof ThinWall) {
+                actor = new ThinWallActor((ThinWall)unit, game.getAssetManager());
+                floor.addActor(actor);
             }
             if (actor != null) {
-                Vector2 position = cellToVector(unit.getRow(), unit.getColumn());
-                actor.setPosition(position.x, position.y);
+                if (unit instanceof GridUnit) {
+                    GridUnit gridUnit = (GridUnit) unit;
+                    Vector2 position = cellToVector(gridUnit.getRow(), gridUnit.getColumn());
+                    actor.setPosition(position.x, position.y);
+                } else if (unit instanceof FenceUnit) {
+                    FenceUnit fenceUnit = (FenceUnit) unit;
+                    Vector2 firstPosition = cellToVector(fenceUnit.getFirstRow(), fenceUnit.getFirstColumn());
+                    Vector2 secondPosition = cellToVector(fenceUnit.getSecondRow(), fenceUnit.getSecondColumn());
+                    Vector2 middlePosition = firstPosition.add(secondPosition).scl(0.5f);
+                    actor.setPosition(middlePosition.x, middlePosition.y);
+                }
             }
             actors.put(unit.getId(), actor);
         }

@@ -60,6 +60,20 @@
             "row": 2,
             "column": 0,
             "unitColor": "BLUE"
+        },
+        {
+            "class": "com.mygdx.logic.ThinWall",
+            "firstRow": 0,
+            "firstColumn": 0,
+            "secondRow": 1,
+            "secondColumn": 0
+        },
+        {
+            "class": "com.mygdx.logic.ThinWall",
+            "firstRow": 1,
+            "firstColumn": 1,
+            "secondRow": 1,
+            "secondColumn": 2
         }
     ]
 }

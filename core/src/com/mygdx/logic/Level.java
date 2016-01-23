@@ -51,8 +51,8 @@ public class Level implements Json.Serializable {
     public Array<Event> getStartingEvents() {
         Array<Event> events = new Array<>();
         for (Ball ball : getBalls()) {
-            Array<Unit> cellUnits = findUnits(ball.getRow(), ball.getColumn());
-            for (Unit unit : cellUnits) {
+            Array<GridUnit> cellUnits = findGridUnits(ball.getRow(), ball.getColumn());
+            for (GridUnit unit : cellUnits) {
                 Interaction interaction = unit.interactOnEnter(ball, Direction.NONE);
                 if (interaction.events != null) {
                     events.addAll(interaction.events);
@@ -68,9 +68,9 @@ public class Level implements Json.Serializable {
 
     private boolean isCompleted() {
         for (Ball ball : getBalls()) {
-            Array<Unit> cellUnits = findUnits(ball.getRow(), ball.getColumn());
+            Array<GridUnit> cellUnits = findGridUnits(ball.getRow(), ball.getColumn());
             boolean isOnPedestal = false;
-            for (Unit unit : cellUnits) {
+            for (GridUnit unit : cellUnits) {
                 if (unit instanceof Pedestal) {
                     if (((Pedestal) unit).getUnitColor() == ball.getUnitColor()) {
                         isOnPedestal = true;
@@ -106,25 +106,38 @@ public class Level implements Json.Serializable {
             if (!isOnField(nextRow, nextColumn)) {
                 break;
             }
-            Array<Unit> nextCellUnits = findUnits(nextRow, nextColumn);
+            Array<GridUnit> nextCellUnits = findGridUnits(nextRow, nextColumn);
             Array<Event> newEvents = new Array<>();
-            Array<Unit> currentCellUnits = findUnits(row, column);
-            for (Unit unit : currentCellUnits) {
+            Array<GridUnit> currentCellUnits = findGridUnits(row, column);
+            for (GridUnit unit : currentCellUnits) {
                 Interaction interaction = unit.interactOnLeave(ball, direction);
                 if (interaction.events != null) {
                     newEvents.addAll(interaction.events);
                 }
             }
             boolean canEnter = true;
-            for (Unit unit : nextCellUnits) {
+            for (GridUnit unit : nextCellUnits) {
                 canEnter &= unit.canEnter(ball, direction);
             }
+
+            Array<FenceUnit> fenceUnits = findFenceUnits(row, column, direction);
+            for (FenceUnit unit : fenceUnits) {
+                canEnter &= unit.canPass();
+            }
+
             if (!canEnter) {
                 break;
             }
 
+            for (FenceUnit unit : fenceUnits) {
+                Interaction interaction = unit.interactOnPass(ball);
+                if (interaction.events != null) {
+                    newEvents.addAll(interaction.events);
+                }
+            }
+
             Direction newDirection = direction;
-            for (Unit unit : nextCellUnits) {
+            for (GridUnit unit : nextCellUnits) {
                 Interaction interaction = unit.interactOnEnter(ball, direction);
                 if (interaction.events != null) {
                     newEvents.addAll(interaction.events);
@@ -158,14 +171,30 @@ public class Level implements Json.Serializable {
         return events;
     }
 
-    public Array<Unit> findUnits(int row, int column) {
-        Array<Unit> cellUnits = new Array<>();
+    public Array<GridUnit> findGridUnits(int row, int column) {
+        Array<GridUnit> cellUnits = new Array<>();
         for (Unit unit : units) {
-            if (unit.getRow() == row && unit.getColumn() == column) {
-                cellUnits.add(unit);
+            if (unit instanceof GridUnit) {
+                GridUnit gridUnit = (GridUnit) unit;
+                if (gridUnit.getRow() == row && gridUnit.getColumn() == column) {
+                    cellUnits.add(gridUnit);
+                }
             }
         }
         return cellUnits;
+    }
+
+    public Array<FenceUnit> findFenceUnits(int row, int column, Direction direction) {
+        Array<FenceUnit> fenceUnits = new Array<>();
+        for (Unit unit : units) {
+            if (unit instanceof FenceUnit) {
+                FenceUnit fenceUnit = (FenceUnit) unit;
+                if (fenceUnit.isOnPath(row, column, direction)) {
+                    fenceUnits.add(fenceUnit);
+                }
+            }
+        }
+        return fenceUnits;
     }
 
     @Override
@@ -176,7 +205,10 @@ public class Level implements Json.Serializable {
         }
 
         for (Unit unit : units) {
-            array[unit.getRow()][unit.getColumn()] = unit.getLetter();
+            if (unit instanceof GridUnit) {
+                GridUnit gridUnit = (GridUnit) unit;
+                array[gridUnit.getRow()][gridUnit.getColumn()] = gridUnit.getLetter();
+            }
         }
 
         StringBuilder builder = new StringBuilder();
@@ -207,7 +239,7 @@ public class Level implements Json.Serializable {
 
         json.writeArrayStart("units");
         for (Unit unit : units) {
-            json.writeObjectStart(unit.getClass(), Unit.class);
+            json.writeObjectStart(unit.getClass(), GridUnit.class);
             json.writeFields(unit);
             json.writeObjectEnd();
         }
