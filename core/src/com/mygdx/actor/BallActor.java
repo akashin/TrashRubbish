@@ -51,4 +51,9 @@ public class BallActor extends UnitActor<Ball> {
     public void setUnitColor(UnitColor unitColor) {
         this.unitColor = unitColor;
     }
+
+    @Override
+    public UnitActorLevel getActorLevel() {
+        return UnitActorLevel.MIDDLE;
+    }
 }

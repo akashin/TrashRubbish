@@ -71,6 +71,13 @@
         {
             "class": "com.mygdx.logic.ThinWall",
             "firstRow": 1,
+            "firstColumn": 0,
+            "secondRow": 0,
+            "secondColumn": 0
+        },
+        {
+            "class": "com.mygdx.logic.ThinWall",
+            "firstRow": 1,
             "firstColumn": 1,
             "secondRow": 1,
             "secondColumn": 2

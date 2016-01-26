@@ -26,4 +26,9 @@ public class WallActor extends UnitActor<Wall> {
         sprite.setPosition(getX() + (getWidth() - SIZE) / 2, getY() + (getHeight() - SIZE) / 2);
         sprite.draw(batch, parentAlpha);
     }
+
+    @Override
+    public UnitActorLevel getActorLevel() {
+        return UnitActorLevel.FLOOR;
+    }
 }

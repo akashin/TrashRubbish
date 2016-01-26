@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.mygdx.logic.Colorer;
 import com.mygdx.util.Constants;
-import com.mygdx.util.GameColors;
 
 public class ColorerActor extends UnitActor<Colorer> {
     private static final float SIZE = Constants.CELL_SIZE * 0.5f;
@@ -26,5 +25,10 @@ public class ColorerActor extends UnitActor<Colorer> {
         sprite.setSize(SIZE, SIZE);
         sprite.setPosition(getX() + (getWidth() - SIZE) / 2, getY() + (getHeight() - SIZE) / 2);
         sprite.draw(batch, parentAlpha);
+    }
+
+    @Override
+    public UnitActorLevel getActorLevel() {
+        return UnitActorLevel.FLOOR;
     }
 }

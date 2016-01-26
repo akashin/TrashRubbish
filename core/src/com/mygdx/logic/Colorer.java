@@ -5,6 +5,12 @@ import com.mygdx.logic.event.ColorChanged;
 import com.mygdx.logic.event.Event;
 
 public class Colorer extends ColoredUnit {
+    protected Colorer() {}
+
+    public Colorer(int row, int column, UnitColor unitColor) {
+        super(row, column, unitColor);
+    }
+
     @Override
     public boolean canEnter(Ball ball, Direction direction) {
         return true;

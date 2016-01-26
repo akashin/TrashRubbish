@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.kotcrab.vis.ui.VisUI;
-import com.mygdx.screen.GameScreen;
 import com.mygdx.screen.MainMenuScreen;
 import com.mygdx.util.Constants;
 import com.mygdx.util.GameColors;
@@ -101,7 +100,7 @@ public class TrashRubbishGame extends Game {
 
     public void updateScale(int width, int height) {
         float size = Math.min(width, height);
-        scale = ((size * GameScreen.LEVEL_SIZE) / GameScreen.MAX_CELLS) / Constants.CELL_SIZE;
+        scale = ((size * Constants.LEVEL_SIZE) / Constants.MAX_CELLS) / Constants.CELL_SIZE;
     }
 
     @Override

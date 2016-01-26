@@ -31,10 +31,15 @@ public class ThinWallActor extends UnitActor<ThinWall> {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (unit.isHorizontal()) {
-            sprite.setPosition(getX() + getWidth() / 2, getY());
+            sprite.setPosition(getX() + (getWidth() - sprite.getWidth()) / 2, getY());
         } else {
-            sprite.setPosition(getX(), getY() + getHeight() / 2);
+            sprite.setPosition(getX(), getY() + (getHeight() - sprite.getHeight()) / 2);
         }
         sprite.draw(batch, parentAlpha);
+    }
+
+    @Override
+    public UnitActorLevel getActorLevel() {
+        return UnitActorLevel.FLOOR;
     }
 }

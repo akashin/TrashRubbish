@@ -15,4 +15,6 @@ public abstract class UnitActor<T> extends Actor {
     public T getUnit() {
         return unit;
     }
+
+    public abstract UnitActorLevel getActorLevel();
 }

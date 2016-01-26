@@ -13,4 +13,8 @@ public enum UnitColor {
     UnitColor(Color color) {
         this.color = color;
     }
+
+    public UnitColor next() {
+        return values()[(ordinal() + 1) % values().length];
+    }
 }

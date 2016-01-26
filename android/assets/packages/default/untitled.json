@@ -1,0 +1,31 @@
+{
+    "rows": 6,
+    "columns": 6,
+    "title": "untitled",
+    "units": [
+        {
+            "class": "com.mygdx.logic.Ball",
+            "row": 3,
+            "column": 2,
+            "unitColor": "BLUE"
+        },
+        {
+            "class": "com.mygdx.logic.Pedestal",
+            "row": 3,
+            "column": 4,
+            "unitColor": "BLUE"
+        },
+        {
+            "class": "com.mygdx.logic.ThinWall",
+            "firstRow": 1,
+            "firstColumn": 3,
+            "secondRow": 1,
+            "secondColumn": 4
+        },
+        {
+            "class": "com.mygdx.logic.Wall",
+            "row": 0,
+            "column": 5
+        }
+    ]
+}

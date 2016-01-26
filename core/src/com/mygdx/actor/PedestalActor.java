@@ -32,4 +32,9 @@ public class PedestalActor extends UnitActor<Pedestal> {
         sprite.setPosition(getX() + (getWidth() - INNER_SIZE) / 2, getY() + (getHeight() - INNER_SIZE) / 2);
         sprite.draw(batch, parentAlpha);
     }
+
+    @Override
+    public UnitActorLevel getActorLevel() {
+        return UnitActorLevel.FLOOR;
+    }
 }

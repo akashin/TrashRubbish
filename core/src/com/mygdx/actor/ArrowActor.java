@@ -76,4 +76,9 @@ public class ArrowActor extends UnitActor<Arrow> {
         }
         batch.draw(texture, vertices, 0, vertices.length);
     }
+
+    @Override
+    public UnitActorLevel getActorLevel() {
+        return UnitActorLevel.FLOOR;
+    }
 }

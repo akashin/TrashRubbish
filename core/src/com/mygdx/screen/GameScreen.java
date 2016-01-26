@@ -25,9 +25,6 @@ import com.mygdx.util.Constants;
 import java.util.HashMap;
 
 public class GameScreen extends BasicScreen {
-    public static final int MAX_CELLS = 6;
-    public static final float LEVEL_SIZE = 0.9f;
-
     private Level level;
     private Queue<BasicAction> actionQueue;
     private boolean levelCompleted = false;
@@ -38,7 +35,6 @@ public class GameScreen extends BasicScreen {
 
     private Group floor;
     private Group middle;
-    private Group ceil;
 
     private Group leftBottom;
     private Group rightBottom;
@@ -59,26 +55,6 @@ public class GameScreen extends BasicScreen {
         this.levelFile = game.getPackage("default").get(levelIndex);
     }
 
-    class Cell {
-        int row, column;
-
-        public Cell(int row, int column) {
-            this.row = row;
-            this.column = column;
-        }
-    }
-
-    public Vector2 cellToVector(int row, int column) {
-        row = level.getRows() - row - 1;
-        return new Vector2(column * Constants.CELL_SIZE, row * Constants.CELL_SIZE);
-    }
-
-    public Cell vectorToCell(float x, float y) {
-        int row = level.getRows() - (int)(y / Constants.CELL_SIZE) - 1;
-        int column = (int)(x / Constants.CELL_SIZE);
-        return new Cell(row, column);
-    }
-
     @Override
     public void show() {
         super.show();
@@ -90,8 +66,14 @@ public class GameScreen extends BasicScreen {
         Json json = new Json(JsonWriter.OutputType.json);
         json.setUsePrototypes(false);
         level = json.fromJson(Level.class, Gdx.files.internal("packages/" + packageDirectory + "/" + levelFile));
+//        level = Level.generateRandomLevel();
+//        level = Level.createDefaultLevel();
 
         levelGroup = new Group();
+        levelGroup.setSize(
+                level.getColumns() * Constants.CELL_SIZE,
+                level.getRows() * Constants.CELL_SIZE
+        );
         levelGroup.setScale(game.getScale());
 
         levelBackground = new LevelBackground(
@@ -101,17 +83,12 @@ public class GameScreen extends BasicScreen {
         );
         levelGroup.addActor(levelBackground);
 
-        levelGroup.setSize(
-                level.getColumns() * Constants.CELL_SIZE,
-                level.getRows() * Constants.CELL_SIZE
-        );
-
         floor = new Group();
         levelGroup.addActor(floor);
+
         middle = new Group();
         levelGroup.addActor(middle);
-        ceil = new Group();
-        levelGroup.addActor(ceil);
+
         stage.addActor(levelGroup);
 
         leftBottom = new Group();
@@ -183,10 +160,17 @@ public class GameScreen extends BasicScreen {
         centerTop.addActor(levelTitle);
 
         for (final Unit unit : level.getUnits()) {
-            Actor actor = null;
+            UnitActor unitActor = LevelHelper.createUnitActor(level, game, unit);
+            if (unitActor == null) continue;
+
+            if (unitActor.getActorLevel() == UnitActorLevel.FLOOR) {
+                floor.addActor(unitActor);
+            } else {
+                middle.addActor(unitActor);
+            }
+
             if (unit instanceof Ball) {
-                actor = new BallActor((Ball)unit, game.getAssetManager());
-                actor.addListener(new ActorGestureListener() {
+                unitActor.addListener(new ActorGestureListener() {
                     @Override
                     public void fling(InputEvent event, float velocityX, float velocityY, int button) {
                         if (actionQueue.size != 0 || levelCompleted) {
@@ -213,37 +197,9 @@ public class GameScreen extends BasicScreen {
                         }
                     }
                 });
-                middle.addActor(actor);
-            } else if (unit instanceof Wall) {
-                actor = new WallActor((Wall)unit, game.getAssetManager());
-                middle.addActor(actor);
-            } else if (unit instanceof Pedestal) {
-                actor = new PedestalActor((Pedestal)unit, game.getAssetManager());
-                floor.addActor(actor);
-            } else if (unit instanceof Arrow) {
-                actor = new ArrowActor((Arrow)unit, game.getAssetManager());
-                floor.addActor(actor);
-            } else if (unit instanceof Colorer) {
-                actor = new ColorerActor((Colorer)unit, game.getAssetManager());
-                floor.addActor(actor);
-            } else if (unit instanceof ThinWall) {
-                actor = new ThinWallActor((ThinWall)unit, game.getAssetManager());
-                floor.addActor(actor);
             }
-            if (actor != null) {
-                if (unit instanceof GridUnit) {
-                    GridUnit gridUnit = (GridUnit) unit;
-                    Vector2 position = cellToVector(gridUnit.getRow(), gridUnit.getColumn());
-                    actor.setPosition(position.x, position.y);
-                } else if (unit instanceof FenceUnit) {
-                    FenceUnit fenceUnit = (FenceUnit) unit;
-                    Vector2 firstPosition = cellToVector(fenceUnit.getFirstRow(), fenceUnit.getFirstColumn());
-                    Vector2 secondPosition = cellToVector(fenceUnit.getSecondRow(), fenceUnit.getSecondColumn());
-                    Vector2 middlePosition = firstPosition.add(secondPosition).scl(0.5f);
-                    actor.setPosition(middlePosition.x, middlePosition.y);
-                }
-            }
-            actors.put(unit.getId(), actor);
+
+            actors.put(unit.getId(), unitActor);
         }
 
         for (Event event : level.getStartingEvents()) {
@@ -296,8 +252,8 @@ public class GameScreen extends BasicScreen {
         Gdx.app.log("ballActor.fling", "Event " + event.getClass().getSimpleName());
         if (event instanceof Movement) {
             Movement movement = (Movement) event;
-            Vector2 src = cellToVector(movement.srcRow, movement.srcColumn);
-            Vector2 dst = cellToVector(movement.dstRow, movement.dstColumn);
+            Vector2 src = LevelHelper.cellToVector(level, movement.srcRow, movement.srcColumn);
+            Vector2 dst = LevelHelper.cellToVector(level, movement.dstRow, movement.dstColumn);
             actionQueue.addLast(new MovementAction(
                     src.x,
                     src.y,

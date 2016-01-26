@@ -10,6 +10,7 @@ import com.mygdx.logic.event.LevelCompleted;
 import com.mygdx.logic.event.Movement;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class Level implements Json.Serializable {
     private int rows;
@@ -28,10 +29,14 @@ public class Level implements Json.Serializable {
         this.title = title;
     }
 
-    private int addUnit(Unit unit) {
+    public int addUnit(Unit unit) {
         unit.setId(firstFreeObjectId++);
         units.add(unit);
         return unit.getId();
+    }
+
+    public void removeUnit(Unit unit) {
+        units.removeValue(unit, true);
     }
 
     public Array<Unit> getUnits() {
@@ -232,10 +237,34 @@ public class Level implements Json.Serializable {
         return level;
     }
 
+    public static Level generateRandomLevel() {
+        Random random = new Random();
+        Level level = new Level(6, 6, "Default Level");
+        int elements = 8 + random.nextInt(9);
+        for (int index = 0; index < elements; ++index) {
+            int row = random.nextInt(level.rows);
+            int column = random.nextInt(level.columns);
+            if (level.findGridUnits(row, column).size == 0) {
+                int type = random.nextInt(4);
+                if (type == 0) {
+                    level.addUnit(new Ball(row, column, UnitColor.BLUE));
+                } else if (type == 1) {
+                    level.addUnit(new Pedestal(row, column, UnitColor.BLUE));
+                } else if (type == 2) {
+                    level.addUnit(new Wall(row, column));
+                } else if (type == 3) {
+                    level.addUnit(new Arrow(row, column, Direction.values()[random.nextInt(4)]));
+                }
+            }
+        }
+        return level;
+    }
+
     @Override
     public void write(Json json) {
         json.writeValue("rows", rows);
         json.writeValue("columns", columns);
+        json.writeValue("title", title);
 
         json.writeArrayStart("units");
         for (Unit unit : units) {
