@@ -34,7 +34,7 @@ public class EditorScreen extends BasicScreen {
     private Group leftBottom;
     private Group rightBottom;
 
-    private int stroke = 0;
+    private int stroke = -1;
     private LevelHelper.Cell cellUnderMouse = null;
 
     public EditorScreen(TrashRubbishGame game, Level level) {
@@ -102,12 +102,14 @@ public class EditorScreen extends BasicScreen {
                     Gdx.app.log("Editor", "Change at " + cell.row + " " + cell.column);
 
                     Array<GridUnit> units = level.findGridUnits(cell.row, cell.column);
-                    GridUnit foundUnit = units.get(0);
-                    for (Unit unit : units) {
-                        removeUnit(unit);
+                    if (units.size > 0) {
+                        GridUnit foundUnit = units.get(0);
+                        for (Unit unit : units) {
+                            removeUnit(unit);
+                        }
+                        LevelHelper.changeGridUnit(foundUnit);
+                        addUnit(foundUnit);
                     }
-                    LevelHelper.changeGridUnit(foundUnit);
-                    addUnit(foundUnit);
                 } else {
                     Gdx.app.log("Editor", "Create " + stroke + " at " + cell.row + " " + cell.column);
 
@@ -115,7 +117,9 @@ public class EditorScreen extends BasicScreen {
                     for (Unit unit : units) {
                         removeUnit(unit);
                     }
-                    addUnit(LevelHelper.createGridUnit(cell.row, cell.column, stroke));
+                    if (stroke != -1) {
+                        addUnit(LevelHelper.createGridUnit(cell.row, cell.column, stroke));
+                    }
                 }
             }
         });
@@ -128,18 +132,6 @@ public class EditorScreen extends BasicScreen {
         levelGroup.addActor(middle);
 
         stage.addActor(levelGroup);
-
-//        leftBottom = new Group();
-//        TextButton retryButton = new TextButton("Play", game.getSkin());
-//        leftBottom.addActor(retryButton);
-//        stage.addActor(leftBottom);
-//
-//        retryButton.addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-//                game.setScreen(new GameScreen(game, "custom", 0));
-//            }
-//        });
 
         rightBottom = new Group();
         TextButton backButton = new TextButton("Back", game.getSkin());
@@ -202,7 +194,6 @@ public class EditorScreen extends BasicScreen {
                 (width - levelGroup.getWidth() * game.getScale()) / 2,
                 (height - levelGroup.getHeight() * game.getScale()) / 2
         );
-//        leftBottom.setPosition(20 * game.getScale(), 20 * game.getScale());
         rightBottom.setPosition(width - 20 * game.getScale(), 20 * game.getScale());
     }
 
@@ -211,6 +202,11 @@ public class EditorScreen extends BasicScreen {
         if (character >= '1' && character <= '5') {
             stroke = character - '0' - 1;
             Gdx.app.log("Editor", "Stroke = " + stroke);
+            return true;
+        }
+        if (character == 'e') {
+            stroke = -1;
+            Gdx.app.log("Editor", "Stroke = erase" + stroke);
             return true;
         }
         return false;
