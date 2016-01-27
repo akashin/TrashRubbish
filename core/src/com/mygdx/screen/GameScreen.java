@@ -66,6 +66,7 @@ public class GameScreen extends BasicScreen {
         Json json = new Json(JsonWriter.OutputType.json);
         json.setUsePrototypes(false);
         level = json.fromJson(Level.class, Gdx.files.internal("packages/" + packageDirectory + "/" + levelFile));
+//        level = json.fromJson(Level.class, Gdx.files.local("untitled.json"));
 //        level = Level.generateRandomLevel();
 //        level = Level.createDefaultLevel();
 

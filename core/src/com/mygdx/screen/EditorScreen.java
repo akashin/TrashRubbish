@@ -2,6 +2,7 @@ package com.mygdx.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -37,14 +38,22 @@ public class EditorScreen extends BasicScreen {
     private int stroke = -1;
     private LevelHelper.Cell cellUnderMouse = null;
 
-    public EditorScreen(TrashRubbishGame game, Level level) {
+    public EditorScreen(TrashRubbishGame game) {
         super(game);
-        this.level = level;
     }
 
     @Override
     public void show() {
         super.show();
+        FileHandle fileHandle = Gdx.files.local("untitled.json");
+        if (fileHandle.exists()) {
+            Json json = new Json(JsonWriter.OutputType.json);
+            json.setUsePrototypes(false);
+            level = json.fromJson(Level.class, fileHandle);
+        } else {
+            level = new Level(6, 6, "untitled");
+        }
+
         actors = new HashMap<>();
 
         levelGroup = new Group();
@@ -72,7 +81,7 @@ public class EditorScreen extends BasicScreen {
                         int row = cell.row;
                         Array<FenceUnit> units = level.findFenceUnits(row, column - 1, Direction.RIGHT);
                         if (units.size == 0) {
-                            addUnit(new ThinWall(row, column - 1, row, column));
+                            addUnit(new ThinWall(row, column - 1, row, column), true);
                         } else {
                             for (Unit unit : units) {
                                 removeUnit(unit);
@@ -88,7 +97,7 @@ public class EditorScreen extends BasicScreen {
                         int column = cell.column;
                         Array<FenceUnit> units = level.findFenceUnits(row, column, Direction.DOWN);
                         if (units.size == 0) {
-                            addUnit(new ThinWall(row, column, row + 1, column));
+                            addUnit(new ThinWall(row, column, row + 1, column), true);
                         } else {
                             for (Unit unit : units) {
                                 removeUnit(unit);
@@ -108,7 +117,7 @@ public class EditorScreen extends BasicScreen {
                             removeUnit(unit);
                         }
                         LevelHelper.changeGridUnit(foundUnit);
-                        addUnit(foundUnit);
+                        addUnit(foundUnit, true);
                     }
                 } else {
                     Gdx.app.log("Editor", "Create " + stroke + " at " + cell.row + " " + cell.column);
@@ -118,7 +127,7 @@ public class EditorScreen extends BasicScreen {
                         removeUnit(unit);
                     }
                     if (stroke != -1) {
-                        addUnit(LevelHelper.createGridUnit(cell.row, cell.column, stroke));
+                        addUnit(LevelHelper.createGridUnit(cell.row, cell.column, stroke), true);
                     }
                 }
             }
@@ -148,10 +157,16 @@ public class EditorScreen extends BasicScreen {
                 game.setScreen(new MainMenuScreen(game));
             }
         });
+
+        for (Unit unit : level.getUnits()) {
+            addUnit(unit, false);
+        }
     }
 
-    private void addUnit(Unit unit) {
-        level.addUnit(unit);
+    private void addUnit(Unit unit, boolean addToLevel) {
+        if (addToLevel) {
+            level.addUnit(unit);
+        }
 
         UnitActor unitActor = LevelHelper.createUnitActor(level, game, unit);
         if (unitActor == null) return;

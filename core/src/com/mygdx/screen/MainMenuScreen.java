@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.TrashRubbishGame;
-import com.mygdx.logic.Level;
 
 public class MainMenuScreen extends BasicScreen {
     private Table table;
@@ -55,7 +54,7 @@ public class MainMenuScreen extends BasicScreen {
         editorButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new EditorScreen(game, new Level(6, 6, "untitled")));
+                game.setScreen(new EditorScreen(game));
             }
         });
 
