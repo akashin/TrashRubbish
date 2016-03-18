@@ -2,7 +2,11 @@ package com.mygdx.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -19,13 +23,17 @@ import com.mygdx.actor.UnitActorLevel;
 import com.mygdx.game.TrashRubbishGame;
 import com.mygdx.logic.*;
 import com.mygdx.util.Constants;
+import com.mygdx.util.GameColors;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EditorScreen extends BasicScreen {
     private Level level;
 
     private HashMap<Integer, Actor> actors;
+    private ArrayList<Actor> brushActors;
+    private ArrayList<HighlightActor> highlightActors;
     private Group levelGroup;
     private LevelBackground levelBackground;
 
@@ -148,6 +156,29 @@ public class EditorScreen extends BasicScreen {
         rightBottom.addActor(backButton);
         stage.addActor(rightBottom);
 
+        leftBottom = new Group();
+        brushActors = new ArrayList<>();
+        highlightActors = new ArrayList<>();
+        // TODO(acid): Eliminate magic constant.
+        for (int unitStroke = 0; unitStroke < 5; ++unitStroke) {
+            Unit unit = LevelHelper.createGridUnit(0, 0, unitStroke);
+            UnitActor actor = LevelHelper.createUnitActor(level, game, unit);
+            actor.setPosition(actor.getWidth() * unitStroke, 0);
+            final int thisUnitStroke = unitStroke;
+            actor.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    setStroke(thisUnitStroke);
+                }
+            });
+            HighlightActor highlightActor = new HighlightActor(actor, game.getAssetManager());
+            brushActors.add(actor);
+            highlightActors.add(highlightActor);
+            leftBottom.addActor(highlightActor);
+            leftBottom.addActor(actor);
+        }
+        stage.addActor(leftBottom);
+
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -209,21 +240,72 @@ public class EditorScreen extends BasicScreen {
                 (width - levelGroup.getWidth() * game.getScale()) / 2,
                 (height - levelGroup.getHeight() * game.getScale()) / 2
         );
+        leftBottom.setPosition(20 * game.getScale(), 20 * game.getScale());
         rightBottom.setPosition(width - 20 * game.getScale(), 20 * game.getScale());
     }
 
     @Override
     public boolean keyTyped(char character) {
         if (character >= '1' && character <= '5') {
-            stroke = character - '0' - 1;
-            Gdx.app.log("Editor", "Stroke = " + stroke);
+            setStroke(character - '0' - 1);
             return true;
         }
         if (character == 'e') {
-            stroke = -1;
-            Gdx.app.log("Editor", "Stroke = erase" + stroke);
+            setStroke(-1);
             return true;
         }
         return false;
+    }
+
+    class HighlightActor extends Actor {
+
+        private Sprite sprite;
+        private Actor underlyingActor;
+
+        private boolean hightlighted = false;
+
+        public HighlightActor(Actor actor, AssetManager assetManager) {
+            this.underlyingActor = actor;
+            sprite = new Sprite(assetManager.get("empty.png", Texture.class));
+        }
+
+        public void setHightlighted(boolean hightlighted) {
+            this.hightlighted = hightlighted;
+        }
+
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+            float WIDTH = underlyingActor.getWidth();
+            float HEIGHT = underlyingActor.getHeight();
+
+            setSize(WIDTH, HEIGHT);
+            setPosition(underlyingActor.getX(), underlyingActor.getY());
+
+            if (hightlighted) {
+                sprite.setColor(GameColors.RED);
+                sprite.setSize(WIDTH, HEIGHT);
+                sprite.setPosition(getX() + (getWidth() - WIDTH) / 2, getY() + (getHeight() - HEIGHT) / 2);
+                sprite.draw(batch, parentAlpha);
+            }
+
+            float INNER_WIDTH = WIDTH * 0.9f;
+            float INNER_HEIGHT = HEIGHT * 0.9f;
+
+            sprite.setColor(GameColors.SCREEN_BACKGROUND);
+            sprite.setSize(INNER_WIDTH, INNER_HEIGHT);
+            sprite.setPosition(getX() + (getWidth() - INNER_WIDTH) / 2, getY() + (getHeight() - INNER_HEIGHT) / 2);
+            sprite.draw(batch, parentAlpha);
+        }
+    };
+
+    private void setStroke(int value) {
+        if (stroke != -1) {
+            highlightActors.get(stroke).setHightlighted(false);
+        }
+        stroke = value;
+        if (stroke != -1) {
+            highlightActors.get(stroke).setHightlighted(true);
+        }
+        Gdx.app.log("Editor", "Stroke = " + stroke);
     }
 }
